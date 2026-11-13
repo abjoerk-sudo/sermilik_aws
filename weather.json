@@ -1,0 +1,159 @@
+{
+  "generated_at": "2026-11-13T00:00:00+00:00",
+  "stations": {
+    "SER_B": {
+      "name": "SER_B",
+      "description": "Sermilik Research Station",
+      "latitude": 65.6797,
+      "longitude": -37.9174,
+      "elevation_m": 28,
+      "id": "SER_B",
+      "source": "Waiting for first update",
+      "source_url": "",
+      "latest": {
+        "time": "2026-11-13T00:00:00+00:00",
+        "temperature": null,
+        "wind_speed": null,
+        "wind_direction": null,
+        "pressure": null,
+        "humidity": null
+      },
+      "stats": {
+        "temperature": {
+          "week": {
+            "min": null,
+            "max": null
+          },
+          "month": {
+            "min": null,
+            "max": null
+          }
+        },
+        "wind_speed": {
+          "week": {
+            "min": null,
+            "max": null
+          },
+          "month": {
+            "min": null,
+            "max": null
+          }
+        },
+        "pressure": {
+          "week": {
+            "min": null,
+            "max": null
+          },
+          "month": {
+            "min": null,
+            "max": null
+          }
+        }
+      },
+      "history": []
+    },
+    "MIT_B": {
+      "name": "MIT_B",
+      "description": "Mittivakkat bedrock station",
+      "latitude": 65.7061,
+      "longitude": -37.8115,
+      "elevation_m": 519,
+      "id": "MIT_B",
+      "source": "Waiting for first update",
+      "source_url": "",
+      "latest": {
+        "time": "2026-11-13T00:00:00+00:00",
+        "temperature": null,
+        "wind_speed": null,
+        "wind_direction": null,
+        "pressure": null,
+        "humidity": null
+      },
+      "stats": {
+        "temperature": {
+          "week": {
+            "min": null,
+            "max": null
+          },
+          "month": {
+            "min": null,
+            "max": null
+          }
+        },
+        "wind_speed": {
+          "week": {
+            "min": null,
+            "max": null
+          },
+          "month": {
+            "min": null,
+            "max": null
+          }
+        },
+        "pressure": {
+          "week": {
+            "min": null,
+            "max": null
+          },
+          "month": {
+            "min": null,
+            "max": null
+          }
+        }
+      },
+      "history": []
+    },
+    "MIT": {
+      "name": "MIT",
+      "description": "Mittivakkat Glacier",
+      "latitude": 65.6919,
+      "longitude": -37.8303,
+      "elevation_m": 422,
+      "id": "MIT",
+      "source": "Waiting for first update",
+      "source_url": "",
+      "latest": {
+        "time": "2026-11-13T00:00:00+00:00",
+        "temperature": null,
+        "wind_speed": null,
+        "wind_direction": null,
+        "pressure": null,
+        "humidity": null
+      },
+      "stats": {
+        "temperature": {
+          "week": {
+            "min": null,
+            "max": null
+          },
+          "month": {
+            "min": null,
+            "max": null
+          }
+        },
+        "wind_speed": {
+          "week": {
+            "min": null,
+            "max": null
+          },
+          "month": {
+            "min": null,
+            "max": null
+          }
+        },
+        "pressure": {
+          "week": {
+            "min": null,
+            "max": null
+          },
+          "month": {
+            "min": null,
+            "max": null
+          }
+        }
+      },
+      "history": []
+    }
+  },
+  "failures": []
+}
