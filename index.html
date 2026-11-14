@@ -1,32 +1,1512 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Sermilik & Mittivakkat Weather</title>
-<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<style>
-:root{--bg:#eef3f7;--panel:#fff;--text:#102333;--muted:#657381;--line:#dce5eb;--accent:#19647e;--soft:#dceef4;--good:#16875f;--warn:#d39119;--bad:#c34949;--shadow:0 12px 35px rgba(28,55,75,.08)}*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:radial-gradient(circle at top right,#d7eaf2 0,transparent 32rem),var(--bg);color:var(--text)}.page{max-width:1220px;margin:auto;padding:34px 18px 70px}header{display:flex;justify-content:space-between;gap:24px;align-items:flex-start;margin-bottom:22px}.eyebrow{text-transform:uppercase;letter-spacing:.13em;font-size:12px;font-weight:800;color:var(--accent);margin-bottom:7px}h1{margin:0;font-size:clamp(31px,5vw,55px);letter-spacing:-.045em;line-height:1}.subtitle{margin-top:10px;color:var(--muted)}.status{border:1px solid var(--line);background:#fff;box-shadow:var(--shadow);border-radius:999px;padding:10px 14px;font-size:13px;font-weight:800;white-space:nowrap}.dot{width:9px;height:9px;display:inline-block;border-radius:50%;background:#9ca3af;margin-right:7px}.dot.good{background:var(--good)}.dot.warn{background:var(--warn)}.dot.bad{background:var(--bad)}.tabs{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:18px}.tab{border:1px solid var(--line);background:#ffffffc9;color:var(--text);padding:10px 17px;border-radius:999px;font:inherit;font-weight:750;cursor:pointer}.tab.active{background:var(--text);color:#fff;border-color:var(--text)}.layout{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(300px,.85fr);gap:17px}.panel{background:#fffffff2;border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden}.pad{padding:20px}.section{font-size:14px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px}.current,.extrema{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.metric,.ecard{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px}.label{color:var(--muted);font-size:13px;font-weight:700;margin-bottom:7px}.value{font-size:clamp(29px,4vw,42px);font-weight:780;letter-spacing:-.04em}.unit{color:var(--muted);font-size:15px;font-weight:650;margin-left:3px}.extrema{margin-top:12px}.ename{font-size:14px;font-weight:800;margin-bottom:13px}.period{display:grid;grid-template-columns:58px 1fr 1fr;gap:6px;align-items:baseline;font-size:13px;padding:7px 0;border-top:1px solid #edf1f4}.period:first-of-type{border-top:0}.pname{color:var(--muted)}.lo,.hi{font-weight:750;text-align:right}.map-panel{min-height:100%;display:flex;flex-direction:column}#map{min-height:415px;flex:1}.info{padding:17px 19px;border-top:1px solid var(--line);background:#fff}.info strong{display:block;font-size:19px;margin-bottom:4px}.meta{color:var(--muted);font-size:13px;line-height:1.55}.source{display:inline-block;margin-top:5px;background:var(--soft);color:var(--accent);padding:4px 8px;border-radius:999px;font-weight:750}.charts{margin-top:17px;display:grid;gap:17px}.chart{height:315px}.footer{margin-top:17px;color:var(--muted);font-size:12.5px;line-height:1.6;padding:0 4px}@media(max-width:900px){.layout{grid-template-columns:1fr}.current,.extrema{grid-template-columns:1fr}#map{min-height:360px}header{flex-direction:column}}
-</style></head><body><div class="page">
-<header><div><div class="eyebrow">Southeast Greenland AWS network</div><h1 id="title">Weather dashboard</h1><div class="subtitle" id="subtitle">Hourly observations from GEUS / PROMICE.</div></div><div class="status"><span id="dot" class="dot"></span><span id="statusText">Loading…</span></div></header>
-<div class="tabs" id="tabs"></div>
-<div class="layout"><div class="panel pad"><div class="section">Latest observation</div><div class="current">
-<div class="metric"><div class="label">Air temperature</div><div class="value"><span id="temperature">—</span><span class="unit">°C</span></div></div>
-<div class="metric"><div class="label">Wind speed</div><div class="value"><span id="wind">—</span><span class="unit">m/s</span></div></div>
-<div class="metric"><div class="label">Air pressure</div><div class="value"><span id="pressure">—</span><span class="unit">hPa</span></div></div></div>
-<div class="section" style="margin-top:25px">Weekly & monthly range</div><div class="extrema">
-<div class="ecard"><div class="ename">Temperature</div><div class="period"><span class="pname">7 days</span><span class="lo" id="twmin">—</span><span class="hi" id="twmax">—</span></div><div class="period"><span class="pname">30 days</span><span class="lo" id="tmmin">—</span><span class="hi" id="tmmax">—</span></div></div>
-<div class="ecard"><div class="ename">Wind speed</div><div class="period"><span class="pname">7 days</span><span class="lo" id="wwmin">—</span><span class="hi" id="wwmax">—</span></div><div class="period"><span class="pname">30 days</span><span class="lo" id="wmmin">—</span><span class="hi" id="wmmax">—</span></div></div>
-<div class="ecard"><div class="ename">Air pressure</div><div class="period"><span class="pname">7 days</span><span class="lo" id="pwmin">—</span><span class="hi" id="pwmax">—</span></div><div class="period"><span class="pname">30 days</span><span class="lo" id="pmmin">—</span><span class="hi" id="pmmax">—</span></div></div>
-</div></div><div class="panel map-panel"><div id="map"></div><div class="info"><strong id="stationName">—</strong><div class="meta"><span id="desc">—</span><br><span id="position">—</span><br>Latest observation: <span id="latestTime">—</span><br><span id="source" class="source">—</span></div></div></div></div>
-<div class="charts"><div class="panel"><div id="tempChart" class="chart"></div></div><div class="panel"><div id="windChart" class="chart"></div></div><div class="panel"><div id="pressureChart" class="chart"></div></div></div>
-<div class="footer">THREDDS is attempted first; if unavailable, the updater automatically falls back to GEUS Dataverse.<br>Dashboard data generated: <span id="generated">—</span>.</div></div>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sermilik & Mittivakkat Weather</title>
+
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  >
+
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  ></script>
+
+  <style>
+    :root {
+      --bg: #eef3f7;
+      --panel: rgba(255,255,255,.95);
+      --text: #102333;
+      --muted: #657381;
+      --line: #dce5eb;
+      --accent: #19647e;
+      --accent-soft: #dceef4;
+      --good: #16875f;
+      --warn: #d39119;
+      --shadow: 0 12px 35px rgba(28, 55, 75, .08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+      background:
+        radial-gradient(
+          circle at top right,
+          #d7eaf2 0,
+          transparent 32rem
+        ),
+        var(--bg);
+
+      color: var(--text);
+    }
+
+    .page {
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 34px 18px 70px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      align-items: flex-start;
+      margin-bottom: 22px;
+    }
+
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: .13em;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--accent);
+      margin-bottom: 7px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(31px, 5vw, 55px);
+      letter-spacing: -.045em;
+      line-height: 1;
+    }
+
+    .subtitle {
+      margin-top: 10px;
+      color: var(--muted);
+      max-width: 680px;
+      line-height: 1.45;
+    }
+
+    .status-pill {
+      border: 1px solid var(--line);
+      background: white;
+      box-shadow: var(--shadow);
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      display: inline-block;
+      border-radius: 50%;
+      background: #9ca3af;
+      margin-right: 7px;
+    }
+
+    .dot.good {
+      background: var(--good);
+    }
+
+    .dot.warn {
+      background: var(--warn);
+    }
+
+    .station-tabs {
+      display: flex;
+      gap: 9px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .station-btn {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.75);
+      color: var(--text);
+      padding: 10px 17px;
+      border-radius: 999px;
+      font: inherit;
+      font-weight: 750;
+      cursor: pointer;
+      transition: .18s ease;
+    }
+
+    .station-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .station-btn.active {
+      background: var(--text);
+      color: white;
+      border-color: var(--text);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns:
+        minmax(0, 1.65fr)
+        minmax(300px, .85fr);
+      gap: 17px;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid rgba(214,225,232,.9);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .panel-pad {
+      padding: 20px;
+    }
+
+    .section-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 14px;
+    }
+
+    .current-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .metric {
+      background: rgba(247,250,252,.9);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+    }
+
+    .metric-label {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 7px;
+    }
+
+    .metric-value {
+      font-size: clamp(29px, 4vw, 42px);
+      font-weight: 780;
+      letter-spacing: -.04em;
+    }
+
+    .unit {
+      color: var(--muted);
+      font-size: 15px;
+      font-weight: 650;
+      margin-left: 3px;
+    }
+
+    .stale-note {
+      display: none;
+      margin-top: 14px;
+      padding: 11px 14px;
+      border-radius: 14px;
+      background: #fff5dd;
+      color: #835f13;
+      border: 1px solid #f1d89d;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .extrema-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .extrema-card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 16px;
+      background: white;
+    }
+
+    .extrema-name {
+      font-size: 14px;
+      font-weight: 800;
+      margin-bottom: 13px;
+    }
+
+    .period {
+      display: grid;
+      grid-template-columns: 58px 1fr 1fr;
+      gap: 6px;
+      align-items: baseline;
+      font-size: 13px;
+      padding: 7px 0;
+      border-top: 1px solid #edf1f4;
+    }
+
+    .period:first-of-type {
+      border-top: 0;
+    }
+
+    .period-name {
+      color: var(--muted);
+    }
+
+    .lo,
+    .hi {
+      font-weight: 750;
+      text-align: right;
+    }
+
+    .map-panel {
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #map {
+      min-height: 415px;
+      flex: 1;
+    }
+
+    .station-info {
+      padding: 17px 19px;
+      border-top: 1px solid var(--line);
+      background: white;
+    }
+
+    .station-info strong {
+      display: block;
+      font-size: 19px;
+      margin-bottom: 4px;
+    }
+
+    .station-meta {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .charts {
+      margin-top: 17px;
+      display: grid;
+      gap: 17px;
+    }
+
+    .chart {
+      height: 315px;
+    }
+
+    .footer-meta {
+      margin-top: 17px;
+      color: var(--muted);
+      font-size: 12.5px;
+      line-height: 1.6;
+      padding: 0 4px;
+    }
+
+    .source-badge {
+      display: inline-block;
+      margin-top: 5px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-weight: 750;
+    }
+
+    @media (max-width: 900px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .current-grid,
+      .extrema-grid {
+        grid-template-columns: 1fr;
+      }
+
+      #map {
+        min-height: 360px;
+      }
+
+      header {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="page">
+
+  <header>
+
+    <div>
+      <div class="eyebrow">
+        Southeast Greenland AWS network
+      </div>
+
+      <h1 id="pageTitle">
+        Weather dashboard
+      </h1>
+
+      <div
+        class="subtitle"
+        id="pageSubtitle"
+      >
+        Hourly observations from GEUS / PROMICE.
+      </div>
+    </div>
+
+    <div class="status-pill">
+
+      <span
+        id="statusDot"
+        class="dot"
+      ></span>
+
+      <span id="statusText">
+        Loading data…
+      </span>
+
+    </div>
+
+  </header>
+
+
+  <div
+    class="station-tabs"
+    id="stationTabs"
+  ></div>
+
+
+  <div class="layout">
+
+    <div class="panel panel-pad">
+
+      <div class="section-title">
+        Latest observation
+      </div>
+
+
+      <div class="current-grid">
+
+        <div class="metric">
+
+          <div class="metric-label">
+            Air temperature
+          </div>
+
+          <div class="metric-value">
+            <span id="temperature">—</span>
+            <span class="unit">°C</span>
+          </div>
+
+        </div>
+
+
+        <div class="metric">
+
+          <div class="metric-label">
+            Wind speed
+          </div>
+
+          <div class="metric-value">
+            <span id="wind">—</span>
+            <span class="unit">m/s</span>
+          </div>
+
+        </div>
+
+
+        <div class="metric">
+
+          <div class="metric-label">
+            Air pressure
+          </div>
+
+          <div class="metric-value">
+            <span id="pressure">—</span>
+            <span class="unit">hPa</span>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div
+        class="stale-note"
+        id="staleNote"
+      >
+        Latest observation is more than
+        3 hours old. Current values are
+        therefore hidden.
+      </div>
+
+
+      <div
+        class="section-title"
+        style="margin-top:25px"
+      >
+        Weekly & monthly range
+      </div>
+
+
+      <div class="extrema-grid">
+
+        <div class="extrema-card">
+
+          <div class="extrema-name">
+            Temperature
+          </div>
+
+          <div class="period">
+            <span class="period-name">
+              7 days
+            </span>
+
+            <span
+              class="lo"
+              id="tempWeekMin"
+            >
+              —
+            </span>
+
+            <span
+              class="hi"
+              id="tempWeekMax"
+            >
+              —
+            </span>
+          </div>
+
+          <div class="period">
+            <span class="period-name">
+              30 days
+            </span>
+
+            <span
+              class="lo"
+              id="tempMonthMin"
+            >
+              —
+            </span>
+
+            <span
+              class="hi"
+              id="tempMonthMax"
+            >
+              —
+            </span>
+          </div>
+
+        </div>
+
+
+        <div class="extrema-card">
+
+          <div class="extrema-name">
+            Wind speed
+          </div>
+
+          <div class="period">
+            <span class="period-name">
+              7 days
+            </span>
+
+            <span
+              class="lo"
+              id="windWeekMin"
+            >
+              —
+            </span>
+
+            <span
+              class="hi"
+              id="windWeekMax"
+            >
+              —
+            </span>
+          </div>
+
+          <div class="period">
+            <span class="period-name">
+              30 days
+            </span>
+
+            <span
+              class="lo"
+              id="windMonthMin"
+            >
+              —
+            </span>
+
+            <span
+              class="hi"
+              id="windMonthMax"
+            >
+              —
+            </span>
+          </div>
+
+        </div>
+
+
+        <div class="extrema-card">
+
+          <div class="extrema-name">
+            Air pressure
+          </div>
+
+          <div class="period">
+            <span class="period-name">
+              7 days
+            </span>
+
+            <span
+              class="lo"
+              id="pressureWeekMin"
+            >
+              —
+            </span>
+
+            <span
+              class="hi"
+              id="pressureWeekMax"
+            >
+              —
+            </span>
+          </div>
+
+          <div class="period">
+            <span class="period-name">
+              30 days
+            </span>
+
+            <span
+              class="lo"
+              id="pressureMonthMin"
+            >
+              —
+            </span>
+
+            <span
+              class="hi"
+              id="pressureMonthMax"
+            >
+              —
+            </span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="panel map-panel">
+
+      <div id="map"></div>
+
+      <div class="station-info">
+
+        <strong id="stationName">
+          —
+        </strong>
+
+        <div class="station-meta">
+
+          <span id="stationDescription">
+            —
+          </span>
+
+          <br>
+
+          <span id="stationPosition">
+            —
+          </span>
+
+          <br>
+
+          Latest available observation:
+          <span id="latestTime">
+            —
+          </span>
+
+          <br>
+
+          <span
+            id="sourceBadge"
+            class="source-badge"
+          >
+            —
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="charts">
+
+    <div class="panel">
+      <div
+        id="tempChart"
+        class="chart"
+      ></div>
+    </div>
+
+
+    <div class="panel">
+      <div
+        id="windChart"
+        class="chart"
+      ></div>
+    </div>
+
+
+    <div class="panel">
+      <div
+        id="pressureChart"
+        class="chart"
+      ></div>
+    </div>
+
+  </div>
+
+
+  <div class="footer-meta">
+
+    Dashboard generated from GEUS / PROMICE
+    hourly AWS products.
+
+    <br>
+
+    Times are shown in UTC.
+
+    <br>
+
+    Dashboard data generated:
+    <span id="generatedTime">
+      —
+    </span>
+
+  </div>
+
+</div>
+
+
 <script>
-let DATA,active='SER_B',map,markers={}; const f=(v,d=1)=>v==null||Number.isNaN(Number(v))?'—':Number(v).toFixed(d); const u=(v,unit,d=1)=>v==null?'—':`${f(v,d)} ${unit}`;
-function status(ts){const h=(Date.now()-new Date(ts).getTime())/36e5,d=document.getElementById('dot'),t=document.getElementById('statusText');d.className='dot';if(h<=3){d.classList.add('good');t.textContent='LIVE'}else if(h<=24){d.classList.add('warn');t.textContent='DELAYED'}else{d.classList.add('bad');t.textContent='DATA NOT CURRENT'}}
-function initMap(){map=L.map('map',{scrollWheelZoom:false}).setView([65.69,-37.86],11);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'&copy; OpenStreetMap contributors'}).addTo(map);Object.values(DATA.stations).forEach(s=>{let m=L.circleMarker([s.latitude,s.longitude],{radius:8,weight:2,fillOpacity:.9}).addTo(map);m.bindTooltip(s.name,{direction:'top'});m.on('click',()=>select(s.id));markers[s.id]=m});let pts=Object.values(DATA.stations).map(s=>[s.latitude,s.longitude]);if(pts.length>1)map.fitBounds(pts,{padding:[35,35]})}
-function tabs(){let h=document.getElementById('tabs');h.innerHTML='';Object.values(DATA.stations).forEach(s=>{let b=document.createElement('button');b.className='tab'+(s.id===active?' active':'');b.textContent=s.name;b.onclick=()=>select(s.id);h.appendChild(b)})}
-function setStat(metric,prefix,unit,d){let s=DATA.stations[active].stats[metric];document.getElementById(prefix+'wmin').textContent='Min '+u(s.week.min,unit,d);document.getElementById(prefix+'wmax').textContent='Max '+u(s.week.max,unit,d);document.getElementById(prefix+'mmin').textContent='Min '+u(s.month.min,unit,d);document.getElementById(prefix+'mmax').textContent='Max '+u(s.month.max,unit,d)}
-function plot(div,title,key,unit){let s=DATA.stations[active];Plotly.react(div,[{x:s.history.map(d=>d.time),y:s.history.map(d=>d[key]),type:'scatter',mode:'lines',hovertemplate:`%{x}<br>%{y:.1f} ${unit}<extra></extra>`}],{title:{text:`${title} · last 30 days`,x:.02},margin:{l:62,r:25,t:58,b:45},xaxis:{title:'Time'},yaxis:{title:unit},paper_bgcolor:'rgba(0,0,0,0)',plot_bgcolor:'rgba(0,0,0,0)',showlegend:false},{responsive:true,displaylogo:false})}
-function select(id){if(!DATA.stations[id])return;active=id;let s=DATA.stations[id];tabs();document.getElementById('title').textContent=`${s.name} weather`;document.getElementById('subtitle').textContent=`${s.description} · hourly observations from GEUS / PROMICE`;document.getElementById('temperature').textContent=f(s.latest.temperature);document.getElementById('wind').textContent=f(s.latest.wind_speed);document.getElementById('pressure').textContent=f(s.latest.pressure,0);setStat('temperature','t','°C',1);setStat('wind_speed','w','m/s',1);setStat('pressure','p','hPa',0);document.getElementById('stationName').textContent=s.name;document.getElementById('desc').textContent=s.description;document.getElementById('position').textContent=`${s.latitude.toFixed(4)}° N, ${Math.abs(s.longitude).toFixed(4)}° W · ${s.elevation_m} m a.s.l.`;document.getElementById('latestTime').textContent=new Date(s.latest.time).toLocaleString();document.getElementById('source').textContent=s.source;status(s.latest.time);if(map&&markers[id]){map.flyTo([s.latitude,s.longitude],12,{duration:.6});markers[id].openTooltip()}plot('tempChart','Air temperature','temperature','°C');plot('windChart','Wind speed','wind_speed','m/s');plot('pressureChart','Air pressure','pressure','hPa')}
-async function load(){let r=await fetch('weather.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)throw Error('Could not load weather.json');DATA=await r.json();document.getElementById('generated').textContent=new Date(DATA.generated_at).toLocaleString();if(!DATA.stations[active])active=Object.keys(DATA.stations)[0];tabs();if(!map)initMap();select(active)}
-load().catch(e=>{console.error(e);document.getElementById('statusText').textContent='DATA ERROR';document.getElementById('dot').className='dot bad'});setInterval(()=>load().catch(console.error),5*60*1000);
-</script></body></html>
+
+let DATA = null;
+
+let activeStation = "SER_B";
+
+let map = null;
+
+let markers = {};
+
+
+const fmt = (
+  value,
+  digits = 1
+) => {
+
+  if (
+    value === null ||
+    value === undefined ||
+    Number.isNaN(Number(value))
+  ) {
+    return "—";
+  }
+
+  return Number(value).toFixed(digits);
+};
+
+
+const withUnit = (
+  value,
+  unit,
+  digits = 1
+) => {
+
+  if (
+    value === null ||
+    value === undefined
+  ) {
+    return "—";
+  }
+
+  return `${fmt(value, digits)} ${unit}`;
+};
+
+
+function observationAgeHours(timestamp) {
+
+  return (
+    Date.now()
+    -
+    new Date(timestamp).getTime()
+  )
+  /
+  3600000;
+
+}
+
+
+function formatUTC(timestamp) {
+
+  const date =
+    new Date(timestamp);
+
+  return date.toLocaleString(
+    "en-GB",
+    {
+      timeZone: "UTC",
+      year: "numeric",
+      month: "short",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false
+    }
+  )
+  + " UTC";
+
+}
+
+
+function statusFromTime(timestamp) {
+
+  const ageHours =
+    observationAgeHours(timestamp);
+
+  const dot =
+    document.getElementById(
+      "statusDot"
+    );
+
+  const text =
+    document.getElementById(
+      "statusText"
+    );
+
+  dot.className =
+    "dot";
+
+  if (ageHours <= 3) {
+
+    dot.classList.add(
+      "good"
+    );
+
+    text.textContent =
+      "LIVE";
+
+  } else {
+
+    dot.classList.add(
+      "warn"
+    );
+
+    text.textContent =
+      "DELAYED";
+
+  }
+
+}
+
+
+function initMap() {
+
+  map =
+    L.map(
+      "map",
+      {
+        zoomControl: true,
+        scrollWheelZoom: false
+      }
+    )
+    .setView(
+      [65.69, -37.86],
+      11
+    );
+
+
+  L.tileLayer(
+    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    {
+      maxZoom: 18,
+      attribution:
+        "&copy; OpenStreetMap contributors"
+    }
+  )
+  .addTo(map);
+
+
+  Object
+    .values(DATA.stations)
+    .forEach(
+      station => {
+
+        const marker =
+          L.circleMarker(
+            [
+              station.latitude,
+              station.longitude
+            ],
+            {
+              radius: 8,
+              weight: 2,
+              fillOpacity: .9
+            }
+          )
+          .addTo(map);
+
+
+        marker.bindTooltip(
+          station.name,
+          {
+            direction: "top"
+          }
+        );
+
+
+        marker.on(
+          "click",
+          () =>
+            selectStation(
+              station.id
+            )
+        );
+
+
+        markers[
+          station.id
+        ] = marker;
+
+      }
+    );
+
+
+  const points =
+    Object
+      .values(DATA.stations)
+      .map(
+        station => [
+          station.latitude,
+          station.longitude
+        ]
+      );
+
+
+  if (points.length > 1) {
+
+    map.fitBounds(
+      points,
+      {
+        padding: [35, 35]
+      }
+    );
+
+  }
+
+}
+
+
+function renderTabs() {
+
+  const holder =
+    document.getElementById(
+      "stationTabs"
+    );
+
+  holder.innerHTML =
+    "";
+
+
+  Object
+    .values(DATA.stations)
+    .forEach(
+      station => {
+
+        const button =
+          document.createElement(
+            "button"
+          );
+
+
+        button.className =
+          "station-btn"
+          +
+          (
+            station.id
+            ===
+            activeStation
+              ?
+              " active"
+              :
+              ""
+          );
+
+
+        button.textContent =
+          station.name;
+
+
+        button.onclick =
+          () =>
+            selectStation(
+              station.id
+            );
+
+
+        holder.appendChild(
+          button
+        );
+
+      }
+    );
+
+}
+
+
+function setExtrema(
+  metric,
+  prefix,
+  unit,
+  digits
+) {
+
+  const stats =
+    DATA
+      .stations[
+        activeStation
+      ]
+      .stats[
+        metric
+      ];
+
+
+  document
+    .getElementById(
+      prefix + "WeekMin"
+    )
+    .textContent =
+      `Min ${
+        withUnit(
+          stats.week.min,
+          unit,
+          digits
+        )
+      }`;
+
+
+  document
+    .getElementById(
+      prefix + "WeekMax"
+    )
+    .textContent =
+      `Max ${
+        withUnit(
+          stats.week.max,
+          unit,
+          digits
+        )
+      }`;
+
+
+  document
+    .getElementById(
+      prefix + "MonthMin"
+    )
+    .textContent =
+      `Min ${
+        withUnit(
+          stats.month.min,
+          unit,
+          digits
+        )
+      }`;
+
+
+  document
+    .getElementById(
+      prefix + "MonthMax"
+    )
+    .textContent =
+      `Max ${
+        withUnit(
+          stats.month.max,
+          unit,
+          digits
+        )
+      }`;
+
+}
+
+
+function plot(
+  div,
+  title,
+  variable,
+  unit,
+  yTitle
+) {
+
+  const station =
+    DATA.stations[
+      activeStation
+    ];
+
+
+  const x =
+    station.history.map(
+      row => row.time
+    );
+
+
+  Plotly.react(
+    div,
+    [
+      {
+        x: x,
+
+        y:
+          station.history.map(
+            row =>
+              row[variable]
+          ),
+
+        type:
+          "scatter",
+
+        mode:
+          "lines",
+
+        name:
+          title,
+
+        hovertemplate:
+          `%{x}<br>%{y:.1f} ${unit}<extra></extra>`
+      }
+    ],
+    {
+      title: {
+        text:
+          `${title} · last 30 days`,
+        x: .02
+      },
+
+      margin: {
+        l: 62,
+        r: 25,
+        t: 58,
+        b: 45
+      },
+
+      xaxis: {
+        title:
+          "Time (UTC)"
+      },
+
+      yaxis: {
+        title:
+          yTitle
+      },
+
+      paper_bgcolor:
+        "rgba(0,0,0,0)",
+
+      plot_bgcolor:
+        "rgba(0,0,0,0)",
+
+      font: {
+        family:
+          "Inter, system-ui, sans-serif"
+      },
+
+      showlegend:
+        false
+    },
+    {
+      responsive:
+        true,
+
+      displaylogo:
+        false
+    }
+  );
+
+}
+
+
+function selectStation(id) {
+
+  if (
+    !DATA.stations[id]
+  ) {
+    return;
+  }
+
+
+  activeStation =
+    id;
+
+
+  const station =
+    DATA.stations[id];
+
+
+  renderTabs();
+
+
+  document
+    .getElementById(
+      "pageTitle"
+    )
+    .textContent =
+      `${station.name} weather`;
+
+
+  document
+    .getElementById(
+      "pageSubtitle"
+    )
+    .textContent =
+      `${station.description} · hourly observations from GEUS / PROMICE`;
+
+
+  const ageHours =
+    observationAgeHours(
+      station.latest.time
+    );
+
+
+  const latestIsFresh =
+    ageHours <= 3;
+
+
+  document
+    .getElementById(
+      "temperature"
+    )
+    .textContent =
+      latestIsFresh
+        ?
+        fmt(
+          station.latest.temperature
+        )
+        :
+        "—";
+
+
+  document
+    .getElementById(
+      "wind"
+    )
+    .textContent =
+      latestIsFresh
+        ?
+        fmt(
+          station.latest.wind_speed
+        )
+        :
+        "—";
+
+
+  document
+    .getElementById(
+      "pressure"
+    )
+    .textContent =
+      latestIsFresh
+        ?
+        fmt(
+          station.latest.pressure,
+          0
+        )
+        :
+        "—";
+
+
+  const staleNote =
+    document.getElementById(
+      "staleNote"
+    );
+
+
+  if (latestIsFresh) {
+
+    staleNote.style.display =
+      "none";
+
+  } else {
+
+    staleNote.style.display =
+      "block";
+
+    staleNote.textContent =
+      `Latest observation is ${ageHours.toFixed(1)} hours old. `
+      +
+      `Current values are hidden because the latest measurement is more than 3 hours old.`;
+
+  }
+
+
+  setExtrema(
+    "temperature",
+    "temp",
+    "°C",
+    1
+  );
+
+
+  setExtrema(
+    "wind_speed",
+    "wind",
+    "m/s",
+    1
+  );
+
+
+  setExtrema(
+    "pressure",
+    "pressure",
+    "hPa",
+    0
+  );
+
+
+  document
+    .getElementById(
+      "stationName"
+    )
+    .textContent =
+      station.name;
+
+
+  document
+    .getElementById(
+      "stationDescription"
+    )
+    .textContent =
+      station.description;
+
+
+  document
+    .getElementById(
+      "stationPosition"
+    )
+    .textContent =
+      `${station.latitude.toFixed(4)}° N, `
+      +
+      `${Math.abs(station.longitude).toFixed(4)}° W · `
+      +
+      `${station.elevation_m} m a.s.l.`;
+
+
+  document
+    .getElementById(
+      "latestTime"
+    )
+    .textContent =
+      formatUTC(
+        station.latest.time
+      );
+
+
+  document
+    .getElementById(
+      "sourceBadge"
+    )
+    .textContent =
+      station.source;
+
+
+  statusFromTime(
+    station.latest.time
+  );
+
+
+  if (
+    map &&
+    markers[id]
+  ) {
+
+    map.flyTo(
+      [
+        station.latitude,
+        station.longitude
+      ],
+      12,
+      {
+        duration: .6
+      }
+    );
+
+
+    markers[
+      id
+    ]
+    .openTooltip();
+
+  }
+
+
+  plot(
+    "tempChart",
+    "Air temperature",
+    "temperature",
+    "°C",
+    "°C"
+  );
+
+
+  plot(
+    "windChart",
+    "Wind speed",
+    "wind_speed",
+    "m/s",
+    "m/s"
+  );
+
+
+  plot(
+    "pressureChart",
+    "Air pressure",
+    "pressure",
+    "hPa",
+    "hPa"
+  );
+
+}
+
+
+async function loadWeather() {
+
+  const response =
+    await fetch(
+      "weather.json?t="
+      +
+      Date.now(),
+      {
+        cache:
+          "no-store"
+      }
+    );
+
+
+  if (
+    !response.ok
+  ) {
+
+    throw new Error(
+      "Could not load weather.json"
+    );
+
+  }
+
+
+  DATA =
+    await response.json();
+
+
+  document
+    .getElementById(
+      "generatedTime"
+    )
+    .textContent =
+      formatUTC(
+        DATA.generated_at
+      );
+
+
+  if (
+    !DATA.stations[
+      activeStation
+    ]
+  ) {
+
+    activeStation =
+      Object.keys(
+        DATA.stations
+      )[0];
+
+  }
+
+
+  renderTabs();
+
+
+  if (!map) {
+
+    initMap();
+
+  }
+
+
+  selectStation(
+    activeStation
+  );
+
+}
+
+
+loadWeather()
+  .catch(
+    error => {
+
+      console.error(
+        error
+      );
+
+      document
+        .getElementById(
+          "statusText"
+        )
+        .textContent =
+          "DATA ERROR";
+
+      document
+        .getElementById(
+          "statusDot"
+        )
+        .className =
+          "dot warn";
+
+    }
+  );
+
+
+setInterval(
+  () =>
+    loadWeather()
+      .catch(
+        console.error
+      ),
+
+  5 * 60 * 1000
+);
+
+</script>
+
+</body>
+</html>
