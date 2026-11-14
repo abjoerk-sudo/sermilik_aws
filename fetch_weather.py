@@ -12,6 +12,7 @@ import requests
 # ============================================================
 
 STATIONS = {
+
     "SER_B": {
         "name": "SER_B",
         "description": "Sermilik Research Station",
@@ -35,101 +36,134 @@ STATIONS = {
         "longitude": -37.8303,
         "elevation_m": 422,
     },
+
 }
 
 
-# Try both GEUS THREDDS servers.
 THREDDS_BASES = [
+
     "https://thredds.geus.dk/thredds/fileServer/aws/l2stations/csv/hour",
+
     "https://thredds01.geus.dk/thredds/fileServer/aws/l2stations/csv/hour",
+
 ]
 
 
 # ============================================================
-# STANDARD VARIABLES USED BY THE DASHBOARD GRAPHS
+# THE NINE VARIABLES USED BY THE DASHBOARD
 # ============================================================
 
-TEMPERATURE_CANDIDATES = [
-    "t_u",
-    "t_i",
-    "t_l",
-    "air_temperature",
-    "temperature",
-]
+VARIABLES = {
 
-WIND_SPEED_CANDIDATES = [
-    "wspd_u",
-    "wspd_i",
-    "wspd_l",
-    "wind_speed",
-]
+    "temperature": {
+        "label": "Air temperature",
+        "unit": "°C",
+        "digits": 1,
+        "candidates": [
+            "t_u",
+            "t_i",
+            "t_l",
+            "air_temperature",
+            "temperature",
+        ],
+    },
 
-WIND_DIRECTION_CANDIDATES = [
-    "wdir_u",
-    "wdir_i",
-    "wdir_l",
-    "wind_direction",
-]
+    "wind_speed": {
+        "label": "Wind speed",
+        "unit": "m/s",
+        "digits": 1,
+        "candidates": [
+            "wspd_u",
+            "wspd_i",
+            "wspd_l",
+            "wind_speed",
+        ],
+    },
 
-PRESSURE_CANDIDATES = [
-    "p_u",
-    "p_i",
-    "p_l",
-    "air_pressure",
-    "pressure",
-]
+    "wind_direction": {
+        "label": "Wind direction",
+        "unit": "°",
+        "digits": 0,
+        "candidates": [
+            "wdir_u",
+            "wdir_i",
+            "wdir_l",
+            "wind_direction",
+        ],
+    },
 
-HUMIDITY_CANDIDATES = [
-    "rh_u",
-    "rh_i",
-    "rh_l",
-    "relative_humidity",
-    "humidity",
-]
+    "humidity": {
+        "label": "Relative humidity",
+        "unit": "%",
+        "digits": 0,
+        "candidates": [
+            "rh_u",
+            "rh_i",
+            "rh_l",
+            "relative_humidity",
+            "humidity",
+        ],
+    },
 
+    "pressure": {
+        "label": "Air pressure",
+        "unit": "hPa",
+        "digits": 0,
+        "candidates": [
+            "p_u",
+            "p_i",
+            "p_l",
+            "air_pressure",
+            "pressure",
+        ],
+    },
 
-# ============================================================
-# FRIENDLY NAMES
-# ============================================================
+    "precipitation": {
+        "label": "Precipitation",
+        "unit": "mm",
+        "digits": 1,
+        "candidates": [
+            "precip_u",
+            "precip_i",
+            "precip_l",
+            "precipitation",
+        ],
+    },
 
-VARIABLE_INFO = {
+    "boom_height": {
+        "label": "Boom height",
+        "unit": "m",
+        "digits": 2,
+        "candidates": [
+            "z_boom_u",
+            "z_boom_i",
+            "z_boom_l",
+            "boom_height",
+        ],
+    },
 
-    "t_u": ("Air temperature – upper", "°C"),
-    "t_i": ("Air temperature", "°C"),
-    "t_l": ("Air temperature – lower", "°C"),
+    "downward_radiation": {
+        "label": "Downward radiation",
+        "unit": "W/m²",
+        "digits": 0,
+        "candidates": [
+            "dsr",
+            "downward_shortwave_radiation",
+            "shortwave_down",
+        ],
+    },
 
-    "rh_u": ("Relative humidity – upper", "%"),
-    "rh_i": ("Relative humidity", "%"),
-    "rh_l": ("Relative humidity – lower", "%"),
+    "upward_radiation": {
+        "label": "Upward radiation",
+        "unit": "W/m²",
+        "digits": 0,
+        "candidates": [
+            "usr",
+            "upward_shortwave_radiation",
+            "shortwave_up",
+        ],
+    },
 
-    "wspd_u": ("Wind speed – upper", "m/s"),
-    "wspd_i": ("Wind speed", "m/s"),
-    "wspd_l": ("Wind speed – lower", "m/s"),
-
-    "wdir_u": ("Wind direction – upper", "°"),
-    "wdir_i": ("Wind direction", "°"),
-    "wdir_l": ("Wind direction – lower", "°"),
-
-    "p_u": ("Air pressure – upper", "hPa"),
-    "p_i": ("Air pressure", "hPa"),
-    "p_l": ("Air pressure – lower", "hPa"),
-
-    "dsr": ("Downward shortwave radiation", "W/m²"),
-    "usr": ("Upward shortwave radiation", "W/m²"),
-    "dlr": ("Downward longwave radiation", "W/m²"),
-    "ulr": ("Upward longwave radiation", "W/m²"),
-
-    "t_surf": ("Surface temperature", "°C"),
-
-    "precip_u": ("Precipitation – upper", "mm"),
-    "precip_l": ("Precipitation – lower", "mm"),
-
-    "z_boom_u": ("Boom height – upper", "m"),
-    "z_boom_l": ("Boom height – lower", "m"),
-
-    "gps_lat": ("GPS latitude", "°"),
-    "gps_lon": ("GPS longitude", "°"),
-    "gps_alt": ("GPS altitude", "m"),
 }
 
 
@@ -167,7 +201,8 @@ def download_station(station_id):
                 )
 
             print(
-                f"Downloaded {len(response.content) / 1024 / 1024:.1f} MB"
+                f"Downloaded "
+                f"{len(response.content) / 1024 / 1024:.1f} MB"
             )
 
             df = pd.read_csv(
@@ -181,7 +216,9 @@ def download_station(station_id):
                 )
 
             print(
-                f"{station_id}: {len(df)} rows, {len(df.columns)} columns"
+                f"{station_id}: "
+                f"{len(df)} rows, "
+                f"{len(df.columns)} columns"
             )
 
             return df, url
@@ -228,9 +265,6 @@ def find_time_column(df):
             return lookup[name]
 
 
-    # Fallback: inspect columns and find one that
-    # actually parses as dates.
-
     for column in df.columns[:10]:
 
         parsed = pd.to_datetime(
@@ -244,12 +278,12 @@ def find_time_column(df):
 
 
     raise RuntimeError(
-        f"Could not identify time column. Columns were: {list(df.columns)}"
+        "Could not identify time column."
     )
 
 
 # ============================================================
-# BASIC HELPERS
+# HELPERS
 # ============================================================
 
 def clean_number(value):
@@ -280,7 +314,10 @@ def iso_time(value):
     return stamp.isoformat()
 
 
-def get_numeric_series(df, candidates):
+def get_numeric_series(
+    df,
+    candidates,
+):
 
     lookup = {
         str(column).strip().lower(): column
@@ -302,7 +339,14 @@ def get_numeric_series(df, candidates):
         )
 
         if series.notna().any():
+
+            print(
+                f"Using {column} for "
+                f"{candidate}"
+            )
+
             return series, str(column)
+
 
     return (
         pd.Series(
@@ -314,7 +358,10 @@ def get_numeric_series(df, candidates):
     )
 
 
-def last_valid(series, times):
+def last_valid(
+    series,
+    times,
+):
 
     valid = series.notna()
 
@@ -333,198 +380,15 @@ def last_valid(series, times):
     )
 
 
-# ============================================================
-# LABELS / UNITS
-# ============================================================
-
-def pretty_name(name):
-
-    return (
-        str(name)
-        .replace("_", " ")
-        .strip()
-        .title()
-    )
-
-
-def infer_unit(name):
-
-    lower = str(name).lower()
-
-    if (
-        lower.startswith("t_")
-        or "temperature" in lower
-        or lower == "t_surf"
-    ):
-        return "°C"
-
-    if lower.startswith("rh"):
-        return "%"
-
-    if "humidity" in lower:
-        return "%"
-
-    if "wspd" in lower:
-        return "m/s"
-
-    if "wind_speed" in lower:
-        return "m/s"
-
-    if "wdir" in lower:
-        return "°"
-
-    if "wind_direction" in lower:
-        return "°"
-
-    if (
-        lower.startswith("p_")
-        or lower == "pressure"
-        or lower == "air_pressure"
-    ):
-        return "hPa"
-
-    if lower in [
-        "dsr",
-        "usr",
-        "dlr",
-        "ulr",
-    ]:
-        return "W/m²"
-
-    if "radiation" in lower:
-        return "W/m²"
-
-    if "precip" in lower:
-        return "mm"
-
-    if "boom" in lower:
-        return "m"
-
-    if "gps_lat" in lower:
-        return "°"
-
-    if "gps_lon" in lower:
-        return "°"
-
-    if "gps_alt" in lower:
-        return "m"
-
-    if "voltage" in lower:
-        return "V"
-
-    return ""
-
-
-def label_and_unit(name):
-
-    if name in VARIABLE_INFO:
-        return VARIABLE_INFO[name]
-
-    return (
-        pretty_name(name),
-        infer_unit(name),
-    )
-
-
-# ============================================================
-# FIND ALL NUMERICAL MEASUREMENTS
-# ============================================================
-
-def should_skip_column(column):
-
-    lower = str(column).lower()
-
-    if lower == "_time":
-        return True
-
-    # Time/calendar helper fields
-    if lower in {
-        "time",
-        "timestamp",
-        "datetime",
-        "date",
-        "year",
-        "month",
-        "day",
-        "hour",
-        "minute",
-        "second",
-        "doy",
-    }:
-        return True
-
-    # QC/flag fields are metadata rather than weather observations
-    if "flag" in lower:
-        return True
-
-    if lower.startswith("qc_"):
-        return True
-
-    if lower.endswith("_qc"):
-        return True
-
-    return False
-
-
-def get_all_latest_measurements(df):
-
-    output = {}
-
-    times = df["_time"]
-
-    for column in df.columns:
-
-        if should_skip_column(column):
-            continue
-
-        series = pd.to_numeric(
-            df[column],
-            errors="coerce",
-        )
-
-        valid = series.notna()
-
-        if not valid.any():
-            continue
-
-        index = series.index[valid][-1]
-
-        value = clean_number(
-            series.loc[index]
-        )
-
-        if value is None:
-            continue
-
-        label, unit = label_and_unit(
-            str(column)
-        )
-
-        output[str(column)] = {
-            "label": label,
-            "unit": unit,
-            "value": value,
-            "time": iso_time(
-                times.loc[index]
-            ),
-        }
-
-    return output
-
-
-# ============================================================
-# STATISTICS
-# ============================================================
-
 def min_max_stats(
     series,
     times,
     newest_time,
 ):
 
-    result = {}
+    output = {}
 
-    for key, days in [
+    for name, days in [
         ("week", 7),
         ("month", 30),
     ]:
@@ -541,14 +405,14 @@ def min_max_stats(
 
         if subset.empty:
 
-            result[key] = {
+            output[name] = {
                 "min": None,
                 "max": None,
             }
 
         else:
 
-            result[key] = {
+            output[name] = {
                 "min": clean_number(
                     subset.min()
                 ),
@@ -557,7 +421,7 @@ def min_max_stats(
                 ),
             }
 
-    return result
+    return output
 
 
 # ============================================================
@@ -573,14 +437,14 @@ def process_station(
         station_id
     )
 
+
     time_column = find_time_column(
         raw
     )
 
+
     df = raw.copy()
 
-
-    # Convert time
 
     df["_time"] = pd.to_datetime(
         df[time_column],
@@ -608,7 +472,7 @@ def process_station(
     if df.empty:
 
         raise RuntimeError(
-            f"{station_id}: no valid timestamped rows."
+            f"{station_id}: no valid rows."
         )
 
 
@@ -617,140 +481,122 @@ def process_station(
     newest_time = times.max()
 
 
-    # --------------------------------------------------------
-    # Standard graph variables
-    # --------------------------------------------------------
+    # ========================================================
+    # FIND SERIES FOR ALL NINE DASHBOARD VARIABLES
+    # ========================================================
 
-    temperature, _ = get_numeric_series(
-        df,
-        TEMPERATURE_CANDIDATES,
-    )
+    series_map = {}
 
-    wind_speed, _ = get_numeric_series(
-        df,
-        WIND_SPEED_CANDIDATES,
-    )
-
-    wind_direction, _ = get_numeric_series(
-        df,
-        WIND_DIRECTION_CANDIDATES,
-    )
-
-    pressure, _ = get_numeric_series(
-        df,
-        PRESSURE_CANDIDATES,
-    )
-
-    humidity, _ = get_numeric_series(
-        df,
-        HUMIDITY_CANDIDATES,
-    )
+    source_columns = {}
 
 
-    # If pressure is in Pa rather than hPa,
-    # convert it for the dashboard.
+    for key, config in VARIABLES.items():
+
+        series, source_column = get_numeric_series(
+            df,
+            config["candidates"],
+        )
+
+        series_map[key] = series
+
+        source_columns[key] = source_column
+
+
+    # Pressure sometimes comes in Pa instead of hPa
+
+    pressure = series_map[
+        "pressure"
+    ]
 
     pressure_values = pressure.dropna()
 
-    if not pressure_values.empty:
+    if (
+        not pressure_values.empty
+        and
+        pressure_values.median() > 2000
+    ):
 
-        if pressure_values.median() > 2000:
-            pressure = pressure / 100.0
-
-
-    # --------------------------------------------------------
-    # Latest core values
-    # --------------------------------------------------------
-
-    temperature_value, temperature_time = last_valid(
-        temperature,
-        times,
-    )
-
-    wind_value, wind_time = last_valid(
-        wind_speed,
-        times,
-    )
-
-    wind_direction_value, wind_direction_time = last_valid(
-        wind_direction,
-        times,
-    )
-
-    pressure_value, pressure_time = last_valid(
-        pressure,
-        times,
-    )
-
-    humidity_value, humidity_time = last_valid(
-        humidity,
-        times,
-    )
+        series_map[
+            "pressure"
+        ] = pressure / 100.0
 
 
-    core_times = [
-        t
-        for t in [
-            temperature_time,
-            wind_time,
-            wind_direction_time,
-            pressure_time,
-            humidity_time,
-        ]
-        if t is not None
+    # ========================================================
+    # LATEST OBSERVATION FOR EACH VARIABLE
+    # ========================================================
+
+    latest_measurements = {}
+
+
+    for key, config in VARIABLES.items():
+
+        value, timestamp = last_valid(
+            series_map[key],
+            times,
+        )
+
+        latest_measurements[key] = {
+
+            "label":
+                config["label"],
+
+            "unit":
+                config["unit"],
+
+            "digits":
+                config["digits"],
+
+            "value":
+                value,
+
+            "time":
+                timestamp,
+
+            "source_column":
+                source_columns[key],
+
+        }
+
+
+    # ========================================================
+    # NEWEST MEASUREMENT TIME
+    # ========================================================
+
+    valid_times = [
+
+        item["time"]
+
+        for item in latest_measurements.values()
+
+        if item["time"] is not None
+
     ]
 
 
-    if core_times:
+    if valid_times:
 
-        latest_core_time = max(
-            core_times,
+        latest_time = max(
+            valid_times,
             key=lambda x: pd.Timestamp(x),
         )
 
     else:
 
-        latest_core_time = iso_time(
+        latest_time = iso_time(
             newest_time
         )
 
 
-    latest = {
-        "time": latest_core_time,
-        "temperature": temperature_value,
-        "wind_speed": wind_value,
-        "wind_direction": wind_direction_value,
-        "pressure": pressure_value,
-        "humidity": humidity_value,
-    }
-
-
-    # --------------------------------------------------------
-    # ALL LATEST NUMERICAL MEASUREMENTS
-    # --------------------------------------------------------
-
-    latest_measurements = (
-        get_all_latest_measurements(
-            df
-        )
-    )
-
-
-    print(
-        f"{station_id}: "
-        f"{len(latest_measurements)} numerical variables found"
-    )
-
-
-    # --------------------------------------------------------
-    # 30 DAY HISTORY FOR PLOTS
-    # --------------------------------------------------------
+    # ========================================================
+    # 30 DAY HISTORY FOR ALL NINE VARIABLES
+    # ========================================================
 
     month_start = (
         newest_time
         -
         pd.Timedelta(days=30)
     )
+
 
     history_indices = df.index[
         times >= month_start
@@ -762,64 +608,52 @@ def process_station(
 
     for index in history_indices:
 
-        history.append({
+        row = {
             "time": iso_time(
                 times.loc[index]
-            ),
-
-            "temperature": clean_number(
-                temperature.loc[index]
-            ),
-
-            "wind_speed": clean_number(
-                wind_speed.loc[index]
-            ),
-
-            "wind_direction": clean_number(
-                wind_direction.loc[index]
-            ),
-
-            "pressure": clean_number(
-                pressure.loc[index]
-            ),
-
-            "humidity": clean_number(
-                humidity.loc[index]
-            ),
-        })
+            )
+        }
 
 
-    # --------------------------------------------------------
+        for key in VARIABLES:
+
+            row[key] = clean_number(
+                series_map[key].loc[index]
+            )
+
+
+        history.append(
+            row
+        )
+
+
+    # ========================================================
     # STATS
-    # --------------------------------------------------------
+    # ========================================================
 
-    stats = {
+    stats = {}
 
-        "temperature": min_max_stats(
-            temperature,
+
+    for key in VARIABLES:
+
+        stats[key] = min_max_stats(
+            series_map[key],
             times,
             newest_time,
-        ),
+        )
 
-        "wind_speed": min_max_stats(
-            wind_speed,
-            times,
-            newest_time,
-        ),
 
-        "pressure": min_max_stats(
-            pressure,
-            times,
-            newest_time,
-        ),
-    }
-
+    # ========================================================
+    # OUTPUT
+    # ========================================================
 
     return {
 
-        "id": station_id,
+        "id":
+            station_id,
 
-        "name": metadata["name"],
+        "name":
+            metadata["name"],
 
         "description":
             metadata["description"],
@@ -839,8 +673,10 @@ def process_station(
         "source_url":
             source_url,
 
-        "latest":
-            latest,
+        "latest": {
+            "time":
+                latest_time,
+        },
 
         "latest_measurements":
             latest_measurements,
@@ -850,6 +686,7 @@ def process_station(
 
         "history":
             history,
+
     }
 
 
@@ -869,6 +706,7 @@ def main():
         "stations": {},
 
         "failures": [],
+
     }
 
 
@@ -876,7 +714,9 @@ def main():
 
         print()
         print("=" * 60)
-        print(f"Processing {station_id}")
+        print(
+            f"Processing {station_id}"
+        )
         print("=" * 60)
 
 
@@ -887,9 +727,9 @@ def main():
                 metadata,
             )
 
-            result["stations"][
-                station_id
-            ] = station_result
+            result[
+                "stations"
+            ][station_id] = station_result
 
 
             print(
@@ -903,18 +743,23 @@ def main():
                 f"{station_id}: FAILED: {exc}"
             )
 
-            result["failures"].append({
-                "station": station_id,
-                "error": str(exc),
+            result[
+                "failures"
+            ].append({
+
+                "station":
+                    station_id,
+
+                "error":
+                    str(exc),
+
             })
 
-
-    # Do not silently deploy a completely empty dashboard.
 
     if not result["stations"]:
 
         raise RuntimeError(
-            "No stations could be downloaded from GEUS."
+            "No stations could be downloaded."
         )
 
 
@@ -934,21 +779,9 @@ def main():
 
 
     print()
-    print("=" * 60)
-    print("weather.json successfully written")
     print(
-        "Stations:",
-        ", ".join(
-            result["stations"].keys()
-        )
+        "weather.json successfully written"
     )
-
-    if result["failures"]:
-
-        print(
-            "Failures:",
-            result["failures"]
-        )
 
 
 if __name__ == "__main__":
