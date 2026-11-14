@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-14T16:53:01.372696+00:00",
+  "generated_at": "2026-11-14T17:59:28.851151+00:00",
   "stations": {
     "SER_B": {
       "id": "SER_B",
@@ -11,7 +11,7 @@
       "source": "GEUS THREDDS L2",
       "source_url": "https://thredds.geus.dk/thredds/fileServer/aws/l2stations/csv/hour/SER_B_hour.csv",
       "latest": {
-        "time": "2026-11-14T14:00:00+00:00",
+        "time": "2026-11-14T15:00:00+00:00",
         "temperature": null,
         "wind_speed": null,
         "wind_direction": null,
@@ -51,13 +51,6 @@
         }
       },
       "history": [
-        {
-          "time": "2026-10-15T14:00:00+00:00",
-          "temperature": 3.617,
-          "wind_speed": 4.383,
-          "pressure": 991.0,
-          "humidity": 34.25
-        },
         {
           "time": "2026-10-15T15:00:00+00:00",
           "temperature": 3.867,
@@ -5094,6 +5087,13 @@
         {
           "time": "2026-11-14T14:00:00+00:00",
           "temperature": null,
+          "wind_speed": 7.027,
+          "pressure": 1007.0,
+          "humidity": null
+        },
+        {
+          "time": "2026-11-14T15:00:00+00:00",
+          "temperature": null,
           "wind_speed": null,
           "pressure": null,
           "humidity": null
@@ -5110,7 +5110,7 @@
       "source": "GEUS THREDDS L2",
       "source_url": "https://thredds.geus.dk/thredds/fileServer/aws/l2stations/csv/hour/MIT_B_hour.csv",
       "latest": {
-        "time": "2026-11-14T14:00:00+00:00",
+        "time": "2026-11-14T15:00:00+00:00",
         "temperature": null,
         "wind_speed": null,
         "wind_direction": null,
@@ -5150,13 +5150,6 @@
         }
       },
       "history": [
-        {
-          "time": "2026-10-15T14:00:00+00:00",
-          "temperature": -0.017,
-          "wind_speed": 4.757,
-          "pressure": 931.0,
-          "humidity": 36.92
-        },
         {
           "time": "2026-10-15T15:00:00+00:00",
           "temperature": 0.05,
@@ -10192,6 +10185,13 @@
         },
         {
           "time": "2026-11-14T14:00:00+00:00",
+          "temperature": -5.1,
+          "wind_speed": 1.667,
+          "pressure": 946.0,
+          "humidity": 41.07
+        },
+        {
+          "time": "2026-11-14T15:00:00+00:00",
           "temperature": null,
           "wind_speed": null,
           "pressure": null,
