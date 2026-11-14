@@ -1,5 +1,4 @@
 <!doctype html>
-
 <html lang="en">
 
 <head>
@@ -26,22 +25,16 @@
 <style>
 
 :root {
-
   --bg: #eef3f7;
-  --panel: rgba(255,255,255,.96);
+  --panel: #ffffff;
   --text: #102333;
-  --muted: #657381;
+  --muted: #687784;
   --line: #dce5eb;
   --accent: #19647e;
-  --accent-soft: #dceef4;
   --good: #16875f;
   --warn: #d39119;
-  --selected: #c83232;
-
-  --shadow:
-    0 10px 28px
-    rgba(28,55,75,.08);
-
+  --red: #c83232;
+  --shadow: 0 7px 22px rgba(28,55,75,.07);
 }
 
 
@@ -50,10 +43,14 @@
 }
 
 
+html,
 body {
-
   margin: 0;
+  min-height: 100%;
+}
 
+
+body {
   font-family:
     Inter,
     ui-sans-serif,
@@ -66,146 +63,134 @@ body {
   background:
     radial-gradient(
       circle at top right,
-      #d7eaf2 0,
+      #d8eaf1 0,
       transparent 32rem
     ),
     var(--bg);
 
   color: var(--text);
-
 }
 
 
 .page {
-
-  max-width: 1220px;
+  width: min(1220px, calc(100% - 24px));
   margin: 0 auto;
-  padding: 16px 18px 24px;
-
+  padding: 10px 0 12px;
 }
 
 
-/* ======================================================
-   LOGO
-   ====================================================== */
+/* ==========================================================
+   TOP AREA
+   ========================================================== */
 
-.institution-bar {
-
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-
-  margin-bottom: 6px;
-
-}
-
-
-.ku-logo {
-
-  display: block;
-  width: auto;
-  height: 54px;
-  max-width: 280px;
-  object-fit: contain;
-
-}
-
-
-/* ======================================================
-   HEADER
-   ====================================================== */
-
-header {
-
-  display: flex;
-  justify-content: space-between;
-  gap: 24px;
-  align-items: flex-start;
-
-  margin-bottom: 10px;
-
-}
-
-
-.header-left {
-  flex: 1;
+.topbar {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: start;
+  gap: 18px;
+  margin-bottom: 7px;
 }
 
 
 .eyebrow {
-
-  text-transform: uppercase;
-  letter-spacing: .13em;
-  font-size: 10px;
-  font-weight: 800;
   color: var(--accent);
-
-  margin-bottom: 4px;
-
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  font-size: 9px;
+  font-weight: 800;
+  margin-bottom: 2px;
 }
 
 
 h1 {
-
   margin: 0;
-
-  font-size:
-    clamp(
-      26px,
-      4vw,
-      42px
-    );
-
-  letter-spacing: -.045em;
+  font-size: clamp(25px, 3vw, 38px);
   line-height: 1;
-
+  letter-spacing: -.04em;
 }
 
 
 .subtitle {
-
-  margin-top: 6px;
-
+  margin-top: 4px;
   color: var(--muted);
+  font-size: 11px;
+}
 
-  font-size: 13px;
 
-  line-height: 1.3;
+.ku-logo {
+  display: block;
+  height: 48px;
+  width: auto;
+  max-width: 250px;
+  object-fit: contain;
+}
 
+
+/* ==========================================================
+   STATION SELECTOR + STATUS
+   ========================================================== */
+
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 7px;
+}
+
+
+.station-tabs {
+  display: flex;
+  gap: 6px;
+}
+
+
+.station-btn {
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.85);
+  color: var(--text);
+
+  padding: 5px 11px;
+
+  border-radius: 999px;
+
+  font: inherit;
+  font-size: 11px;
+  font-weight: 750;
+
+  cursor: pointer;
+}
+
+
+.station-btn.active {
+  background: var(--text);
+  color: white;
+  border-color: var(--text);
 }
 
 
 .status-pill {
-
-  border: 1px solid var(--line);
-  background: white;
-  box-shadow: var(--shadow);
+  padding: 5px 9px;
 
   border-radius: 999px;
+  border: 1px solid var(--line);
 
-  padding: 7px 11px;
+  background: white;
 
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 800;
 
-  white-space: nowrap;
-
+  box-shadow: var(--shadow);
 }
 
 
 .dot {
-
-  width: 8px;
-  height: 8px;
-
+  width: 7px;
+  height: 7px;
   display: inline-block;
-
   border-radius: 50%;
-
-  background: #9ca3af;
-
-  margin-right: 6px;
-
+  margin-right: 5px;
+  background: #999;
 }
 
 
@@ -219,583 +204,359 @@ h1 {
 }
 
 
-/* ======================================================
-   STATION BUTTONS
-   ====================================================== */
+/* ==========================================================
+   GENERAL PANELS
+   ========================================================== */
 
-.station-tabs {
-
-  display: flex;
-  gap: 7px;
-  flex-wrap: wrap;
-
-  margin-bottom: 10px;
-
-}
-
-
-.station-btn {
+.panel {
+  background: var(--panel);
 
   border: 1px solid var(--line);
 
-  background:
-    rgba(255,255,255,.75);
+  border-radius: 15px;
 
-  color: var(--text);
+  box-shadow: var(--shadow);
 
-  padding:
-    7px 12px;
-
-  border-radius:
-    999px;
-
-  font:
-    inherit;
-
-  font-size:
-    12px;
-
-  font-weight:
-    750;
-
-  cursor:
-    pointer;
-
+  overflow: hidden;
 }
 
 
-.station-btn.active {
+/* ==========================================================
+   UPPER GRID
+   ========================================================== */
 
-  background:
-    var(--text);
-
-  color:
-    white;
-
-  border-color:
-    var(--text);
-
-}
-
-
-/* ======================================================
-   MAIN LAYOUT
-   ====================================================== */
-
-.layout {
-
+.upper-grid {
   display: grid;
 
   grid-template-columns:
-    minmax(0, 1.85fr)
-    minmax(290px, .75fr);
+    minmax(0, 2fr)
+    minmax(250px, .72fr);
 
-  gap: 12px;
-
+  gap: 9px;
 }
 
 
-.panel {
+/* ==========================================================
+   OBSERVATIONS
+   ========================================================== */
 
-  background:
-    var(--panel);
-
-  border:
-    1px solid
-    rgba(214,225,232,.9);
-
-  border-radius:
-    18px;
-
-  box-shadow:
-    var(--shadow);
-
-  overflow:
-    hidden;
-
+.observations-panel {
+  padding: 10px;
 }
 
 
-.panel-pad {
-  padding: 13px;
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 7px;
 }
 
 
 .section-title {
-
-  font-size:
-    11px;
-
-  font-weight:
-    800;
-
-  color:
-    var(--muted);
-
-  text-transform:
-    uppercase;
-
-  letter-spacing:
-    .08em;
-
-  margin-bottom:
-    4px;
-
+  text-transform: uppercase;
+  color: var(--muted);
+  letter-spacing: .08em;
+  font-size: 9px;
+  font-weight: 800;
 }
 
 
-.latest-time-line {
-
-  color:
-    var(--muted);
-
-  font-size:
-    11px;
-
-  margin-bottom:
-    8px;
-
+.latest-time {
+  color: var(--muted);
+  font-size: 9px;
 }
 
 
-.latest-time-line strong {
-  color: var(--text);
-}
-
-
-/* ======================================================
-   EXACTLY 5 x 2 MEASUREMENT GRID
-   ====================================================== */
+/* EXACTLY FIVE COLUMNS = TWO ROWS FOR TEN BOXES */
 
 .current-grid {
-
   display: grid;
-
-  grid-template-columns:
-    repeat(5, minmax(0, 1fr));
-
-  gap:
-    8px;
-
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 7px;
 }
 
 
 .metric {
+  min-width: 0;
+  height: 82px;
 
-  background:
-    rgba(247,250,252,.95);
+  padding: 8px;
 
-  border:
-    2px solid transparent;
+  background: #f8fafb;
 
-  outline:
-    1px solid var(--line);
+  border: 2px solid transparent;
+  outline: 1px solid var(--line);
 
-  border-radius:
-    13px;
+  border-radius: 11px;
 
-  padding:
-    9px;
-
-  cursor:
-    pointer;
-
-  min-width:
-    0;
-
-  min-height:
-    88px;
+  cursor: pointer;
 
   transition:
-    transform .15s ease,
-    border-color .15s ease,
-    background .15s ease;
-
+    border-color .12s ease,
+    transform .12s ease,
+    background .12s ease;
 }
 
 
 .metric:hover {
-
-  transform:
-    translateY(-1px);
-
-  background:
-    white;
-
+  transform: translateY(-1px);
+  background: white;
 }
 
 
 .metric.selected {
-
-  border-color:
-    var(--selected);
-
-  outline:
-    none;
-
-  background:
-    white;
-
+  border-color: var(--red);
+  outline: none;
+  background: white;
 }
 
 
 .metric.no-data {
-  opacity: .5;
+  opacity: .48;
 }
 
 
 .metric-label {
+  height: 22px;
 
-  color:
-    var(--muted);
+  overflow: hidden;
 
-  font-size:
-    10px;
+  color: var(--muted);
 
-  font-weight:
-    700;
-
-  line-height:
-    1.15;
-
-  min-height:
-    23px;
-
+  font-size: 9.5px;
+  font-weight: 700;
+  line-height: 1.12;
 }
 
 
 .metric-value {
+  margin-top: 1px;
 
-  margin-top:
-    2px;
+  white-space: nowrap;
 
-  font-size:
-    20px;
+  font-size: 20px;
+  line-height: 1;
 
-  font-weight:
-    780;
+  font-weight: 780;
 
-  letter-spacing:
-    -.04em;
-
-  line-height:
-    1;
-
-  white-space:
-    nowrap;
-
+  letter-spacing: -.035em;
 }
 
 
 .unit {
-
-  font-size:
-    9px;
-
-  color:
-    var(--muted);
-
-  margin-left:
-    2px;
-
+  margin-left: 2px;
+  color: var(--muted);
+  font-size: 9px;
 }
 
 
 .metric-time {
+  margin-top: 5px;
 
-  margin-top:
-    5px;
+  color: var(--muted);
 
-  color:
-    var(--muted);
+  font-size: 7.5px;
+  line-height: 1.05;
 
-  font-size:
-    8px;
+  white-space: nowrap;
 
-  line-height:
-    1.1;
-
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 
-/* ======================================================
-   DELAYED MESSAGE
-   ====================================================== */
-
-.delayed-note {
-
-  display:
-    none;
-
-  margin-top:
-    8px;
-
-  padding:
-    7px 9px;
-
-  border-radius:
-    10px;
-
-  background:
-    #fff5dd;
-
-  color:
-    #835f13;
-
-  border:
-    1px solid
-    #f1d89d;
-
-  font-size:
-    10px;
-
-}
-
-
-/* ======================================================
+/* ==========================================================
    MAP
-   ====================================================== */
+   ========================================================== */
 
 .map-panel {
-
-  min-height:
-    100%;
-
-  display:
-    flex;
-
-  flex-direction:
-    column;
-
+  display: flex;
+  flex-direction: column;
 }
 
 
 #map {
-
-  min-height:
-    245px;
-
-  flex:
-    1;
-
+  height: 152px;
 }
 
 
 .station-info {
-
-  padding:
-    9px 12px;
-
-  border-top:
-    1px solid
-    var(--line);
-
-  background:
-    white;
-
+  padding: 7px 10px;
+  border-top: 1px solid var(--line);
+  background: white;
 }
 
 
-.station-info strong {
-
-  display:
-    block;
-
-  font-size:
-    14px;
-
-  margin-bottom:
-    1px;
-
+.station-name {
+  font-size: 12px;
+  font-weight: 800;
+  margin-bottom: 1px;
 }
 
 
 .station-meta {
-
-  color:
-    var(--muted);
-
-  font-size:
-    9.5px;
-
-  line-height:
-    1.35;
-
+  color: var(--muted);
+  font-size: 8.5px;
+  line-height: 1.3;
 }
 
 
 .source-badge {
+  display: inline-block;
 
-  display:
-    inline-block;
+  margin-top: 2px;
 
-  margin-top:
-    3px;
+  padding: 2px 5px;
 
-  padding:
-    2px 6px;
+  border-radius: 999px;
 
-  border-radius:
-    999px;
+  background: #e2f0f4;
 
-  background:
-    var(--accent-soft);
+  color: var(--accent);
 
-  color:
-    var(--accent);
-
-  font-weight:
-    750;
-
+  font-size: 8px;
+  font-weight: 750;
 }
 
 
-/* ======================================================
-   SINGLE 30-DAY GRAPH
-   ====================================================== */
+/* ==========================================================
+   DELAYED MESSAGE
+   ========================================================== */
 
-.chart-section {
+.delayed-note {
+  display: none;
 
-  margin-top:
-    11px;
+  margin-top: 6px;
 
+  padding: 5px 7px;
+
+  border: 1px solid #efd895;
+  border-radius: 8px;
+
+  background: #fff6df;
+  color: #765815;
+
+  font-size: 8.5px;
 }
 
+
+/* ==========================================================
+   GRAPH
+   ========================================================== */
 
 .chart-panel {
-
-  border:
-    2px solid
-    var(--selected);
-
+  margin-top: 9px;
+  border: 2px solid var(--red);
 }
 
 
-.chart-heading {
+.chart-top {
+  height: 28px;
 
-  padding:
-    9px 14px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
+  padding: 5px 12px 0;
 }
 
 
-.chart-heading-label {
-
-  color:
-    var(--muted);
-
-  text-transform:
-    uppercase;
-
-  letter-spacing:
-    .08em;
-
-  font-size:
-    9px;
-
-  font-weight:
-    800;
-
+.chart-title-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
 }
 
 
-.chart-heading-title {
+.chart-kicker {
+  color: var(--muted);
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
 
-  margin-top:
-    1px;
 
-  font-size:
-    15px;
+.chart-title {
+  font-size: 13px;
+  font-weight: 800;
+}
 
-  font-weight:
-    800;
 
+.chart-help {
+  color: var(--muted);
+  font-size: 8px;
 }
 
 
 #mainChart {
-
-  height:
-    245px;
-
+  height: 210px;
 }
 
 
-/* ======================================================
+/* ==========================================================
    FOOTER
-   ====================================================== */
+   ========================================================== */
 
-.footer-meta {
+.footer {
+  margin-top: 5px;
 
-  margin-top:
-    7px;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
 
-  color:
-    var(--muted);
+  color: var(--muted);
 
-  font-size:
-    9px;
-
-  line-height:
-    1.35;
-
+  font-size: 7.5px;
 }
 
 
-/* ======================================================
+/* ==========================================================
    RESPONSIVE
-   ====================================================== */
+   ========================================================== */
 
-@media (
-  max-width: 1050px
-) {
+@media (max-width: 900px) {
 
-  .current-grid {
-    grid-template-columns:
-      repeat(5, minmax(0,1fr));
-  }
-
-}
-
-
-@media (
-  max-width: 900px
-) {
-
-  .institution-bar {
-    justify-content: flex-start;
+  .topbar {
+    grid-template-columns: 1fr;
   }
 
 
   .ku-logo {
-
-    width:
-      min(290px,80vw);
-
-    height:
-      auto;
-
+    height: auto;
+    width: min(250px, 75vw);
   }
 
 
-  header {
-    flex-direction: column;
-  }
-
-
-  .layout {
+  .upper-grid {
     grid-template-columns: 1fr;
   }
 
 
   .current-grid {
-    grid-template-columns:
-      repeat(2,1fr);
+    grid-template-columns: repeat(2, minmax(0,1fr));
+  }
+
+
+  .metric {
+    height: 86px;
   }
 
 
   #map {
-    min-height: 260px;
+    height: 210px;
+  }
+
+
+  #mainChart {
+    height: 250px;
+  }
+
+
+  .footer {
+    display: block;
   }
 
 }
@@ -810,22 +571,11 @@ h1 {
 <div class="page">
 
 
-  <div class="institution-bar">
+  <!-- TOP -->
 
-    <img
-      src="./assets/ku_logo.png"
-      alt="University of Copenhagen"
-      class="ku-logo"
-    >
+  <div class="topbar">
 
-  </div>
-
-
-
-  <header>
-
-
-    <div class="header-left">
+    <div>
 
       <div class="eyebrow">
         Sermilik Research Station AWS
@@ -838,9 +588,29 @@ h1 {
       <div
         class="subtitle"
         id="pageSubtitle">
-        Hourly observations from GEUS / PROMICE.
+        Hourly observations from GEUS / PROMICE
       </div>
 
+    </div>
+
+
+    <img
+      src="./assets/ku_logo.png"
+      alt="University of Copenhagen"
+      class="ku-logo"
+    >
+
+  </div>
+
+
+
+  <!-- CONTROLS -->
+
+  <div class="controls">
+
+    <div
+      class="station-tabs"
+      id="stationTabs">
     </div>
 
 
@@ -857,36 +627,35 @@ h1 {
 
     </div>
 
-
-  </header>
-
-
-
-  <div
-    class="station-tabs"
-    id="stationTabs">
   </div>
 
 
 
-  <div class="layout">
+  <!-- UPPER CONTENT -->
+
+  <div class="upper-grid">
 
 
-    <div class="panel panel-pad">
+    <!-- TEN OBSERVATION BUTTONS -->
+
+    <div class="panel observations-panel">
 
 
-      <div class="section-title">
-        Latest observations
-      </div>
+      <div class="section-header">
 
+        <div class="section-title">
+          Latest observations
+        </div>
 
-      <div class="latest-time-line">
+        <div class="latest-time">
 
-        Most recent measurement:
+          Latest:
 
-        <strong id="latestBoxTime">
-          —
-        </strong>
+          <strong id="latestBoxTime">
+            —
+          </strong>
+
+        </div>
 
       </div>
 
@@ -907,6 +676,8 @@ h1 {
 
 
 
+    <!-- MAP -->
+
     <div class="panel map-panel">
 
 
@@ -916,9 +687,13 @@ h1 {
 
       <div class="station-info">
 
-        <strong id="stationName">
+
+        <div
+          class="station-name"
+          id="stationName">
           —
-        </strong>
+        </div>
+
 
         <div class="station-meta">
 
@@ -934,8 +709,7 @@ h1 {
 
           <br>
 
-          Most recent measurement:
-
+          Latest:
           <span id="latestTime">
             —
           </span>
@@ -950,6 +724,7 @@ h1 {
 
         </div>
 
+
       </div>
 
 
@@ -960,31 +735,38 @@ h1 {
 
 
 
-  <div class="chart-section">
+  <!-- ONLY ONE GRAPH -->
+
+  <div class="panel chart-panel">
 
 
-    <div class="panel chart-panel">
+    <div class="chart-top">
 
 
-      <div class="chart-heading">
+      <div class="chart-title-wrap">
 
-        <div class="chart-heading-label">
-          30-day history
-        </div>
+        <span class="chart-kicker">
+          30 days
+        </span>
 
-        <div
-          class="chart-heading-title"
+        <span
+          class="chart-title"
           id="chartTitle">
           Air temperature
-        </div>
+        </span>
 
       </div>
 
 
-      <div id="mainChart">
+      <div class="chart-help">
+        Click an observation above to change graph
       </div>
 
 
+    </div>
+
+
+    <div id="mainChart">
     </div>
 
 
@@ -992,20 +774,15 @@ h1 {
 
 
 
-  <div class="footer-meta">
+  <div class="footer">
 
-    Dashboard generated from GEUS / PROMICE hourly AWS products.
+    <span>
+      GEUS / PROMICE hourly AWS data · All times UTC
+    </span>
 
-    <br>
-
-    Click any observation box to display its 30-day history. All times shown are UTC.
-
-    <br>
-
-    Dashboard generated:
-
-    <span id="generatedTime">
-      —
+    <span>
+      Updated:
+      <span id="generatedTime">—</span>
     </span>
 
   </div>
@@ -1017,10 +794,19 @@ h1 {
 
 <script>
 
+/*
+  COMPACT DASHBOARD
+  Exactly 10 measurement boxes.
+  No weekly or monthly summary boxes.
+*/
 
-const FRESH_HOURS =
-  5;
 
+const FRESH_HOURS = 5;
+
+
+/* ==========================================================
+   EXACTLY TEN MEASUREMENTS
+   ========================================================== */
 
 const MEASUREMENTS = [
 
@@ -1047,47 +833,99 @@ const MEASUREMENTS = [
 ];
 
 
-let DATA =
-  null;
+const META = {
+
+  temperature: {
+    label: "Air temperature",
+    unit: "°C",
+    digits: 1
+  },
+
+  wind_speed: {
+    label: "Wind speed",
+    unit: "m/s",
+    digits: 1
+  },
+
+  wind_direction: {
+    label: "Wind direction",
+    unit: "°",
+    digits: 0
+  },
+
+  humidity: {
+    label: "Relative humidity",
+    unit: "%",
+    digits: 0
+  },
+
+  pressure: {
+    label: "Air pressure",
+    unit: "hPa",
+    digits: 0
+  },
+
+  precipitation: {
+    label: "Precipitation",
+    unit: "mm",
+    digits: 1
+  },
+
+  boom_height: {
+    label: "Boom height",
+    unit: "m",
+    digits: 2
+  },
+
+  downward_radiation: {
+    label: "Downward radiation",
+    unit: "W/m²",
+    digits: 0
+  },
+
+  upward_radiation: {
+    label: "Upward radiation",
+    unit: "W/m²",
+    digits: 0
+  },
+
+  albedo: {
+    label: "Albedo",
+    unit: "",
+    digits: 2
+  }
+
+};
 
 
-let activeStation =
-  "SER_B";
+let DATA = null;
+
+let activeStation = "SER_B";
+
+let selectedMeasurement = "temperature";
+
+let map = null;
+
+let markers = {};
 
 
-let selectedMeasurement =
-  "temperature";
 
-
-let map =
-  null;
-
-
-let markers =
-  {};
-
-
+/* ==========================================================
+   BASIC HELPERS
+   ========================================================== */
 
 function isNumber(value) {
 
   return (
-
     value !== null
-
     &&
-
     value !== undefined
-
     &&
-
     value !== ""
-
     &&
-
     Number.isFinite(
       Number(value)
     )
-
   );
 
 }
@@ -1102,7 +940,6 @@ function fmt(
   if (!isNumber(value)) {
     return "—";
   }
-
 
   return Number(value)
     .toFixed(digits);
@@ -1123,13 +960,9 @@ function parseUTC(timestamp) {
 
 
   if (
-
     !text.endsWith("Z")
-
     &&
-
     !/[+-]\d\d:\d\d$/.test(text)
-
   ) {
 
     text += "Z";
@@ -1161,53 +994,31 @@ function parseUTC(timestamp) {
 function formatUTC(timestamp) {
 
   const date =
-    parseUTC(
-      timestamp
-    );
+    parseUTC(timestamp);
 
 
   if (!date) {
-    return "No observation";
+    return "—";
   }
 
 
   return (
-
     date.toLocaleString(
 
       "en-GB",
 
       {
-
-        timeZone:
-          "UTC",
-
-        year:
-          "numeric",
-
-        month:
-          "short",
-
-        day:
-          "2-digit",
-
-        hour:
-          "2-digit",
-
-        minute:
-          "2-digit",
-
-        hour12:
-          false
-
+        timeZone: "UTC",
+        day: "2-digit",
+        month: "short",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false
       }
 
     )
-
     +
-
     " UTC"
-
   );
 
 }
@@ -1226,40 +1037,303 @@ function observationAgeHours(timestamp) {
 
 
   return (
-
     Date.now()
-
     -
-
     date.getTime()
-
   )
-
   /
-
   3600000;
 
 }
 
 
 
-function newestMeasurementTime(station) {
+/* ==========================================================
+   ALBEDO
+   ========================================================== */
 
-  const data =
-    station.latest_measurements
+function calculateAlbedo(
+  upward,
+  downward
+) {
+
+  if (
+    !isNumber(upward)
     ||
-    {};
+    !isNumber(downward)
+  ) {
+
+    return null;
+
+  }
 
 
-  const times =
-    MEASUREMENTS
+  const down =
+    Number(downward);
 
-      .map(
-        key =>
-          data[key]?.time
-      )
 
-      .filter(Boolean);
+  if (down <= 5) {
+    return null;
+  }
+
+
+  const value =
+    Number(upward) / down;
+
+
+  if (
+    value < 0
+    ||
+    value > 1.2
+  ) {
+
+    return null;
+
+  }
+
+
+  return value;
+
+}
+
+
+
+/* ==========================================================
+   GET LATEST MEASUREMENT
+   ========================================================== */
+
+function getLatestMeasurement(
+  station,
+  key
+) {
+
+  const meta =
+    META[key];
+
+
+  /*
+    Use backend value if available.
+  */
+
+  if (
+    station.latest_measurements
+    &&
+    station.latest_measurements[key]
+  ) {
+
+    const source =
+      station.latest_measurements[key];
+
+
+    if (
+      isNumber(source.value)
+    ) {
+
+      return {
+
+        label:
+          meta.label,
+
+        unit:
+          meta.unit,
+
+        digits:
+          meta.digits,
+
+        value:
+          Number(source.value),
+
+        time:
+          source.time
+
+      };
+
+    }
+
+  }
+
+
+  /*
+    If albedo does not exist in weather.json,
+    calculate it from radiation.
+  */
+
+  if (
+    key === "albedo"
+    &&
+    station.latest_measurements
+  ) {
+
+    const upward =
+      station.latest_measurements[
+        "upward_radiation"
+      ];
+
+
+    const downward =
+      station.latest_measurements[
+        "downward_radiation"
+      ];
+
+
+    const value =
+      calculateAlbedo(
+        upward?.value,
+        downward?.value
+      );
+
+
+    if (isNumber(value)) {
+
+      const time =
+        upward?.time
+        ||
+        downward?.time
+        ||
+        null;
+
+
+      return {
+
+        label:
+          "Albedo",
+
+        unit:
+          "",
+
+        digits:
+          2,
+
+        value:
+          value,
+
+        time:
+          time
+
+      };
+
+    }
+
+  }
+
+
+  return {
+
+    label:
+      meta.label,
+
+    unit:
+      meta.unit,
+
+    digits:
+      meta.digits,
+
+    value:
+      null,
+
+    time:
+      null
+
+  };
+
+}
+
+
+
+/* ==========================================================
+   GET HISTORY
+   ========================================================== */
+
+function historyValue(
+  row,
+  key
+) {
+
+  /*
+    Direct variable.
+  */
+
+  if (
+    key !== "albedo"
+  ) {
+
+    return isNumber(
+      row[key]
+    )
+      ?
+      Number(row[key])
+      :
+      null;
+
+  }
+
+
+  /*
+    Existing albedo from backend.
+  */
+
+  if (
+    isNumber(
+      row.albedo
+    )
+  ) {
+
+    return Number(
+      row.albedo
+    );
+
+  }
+
+
+  /*
+    Otherwise derive albedo.
+  */
+
+  return calculateAlbedo(
+
+    row.upward_radiation,
+
+    row.downward_radiation
+
+  );
+
+}
+
+
+
+/* ==========================================================
+   NEWEST TIME
+   ========================================================== */
+
+function newestMeasurementTime(
+  station
+) {
+
+  const times = [];
+
+
+  MEASUREMENTS.forEach(
+    key => {
+
+      const item =
+        getLatestMeasurement(
+          station,
+          key
+        );
+
+
+      if (
+        item.time
+      ) {
+
+        times.push(
+          item.time
+        );
+
+      }
+
+    }
+  );
 
 
   if (!times.length) {
@@ -1268,15 +1342,10 @@ function newestMeasurementTime(station) {
 
 
   times.sort(
-
     (a,b) =>
-
       new Date(b)
-
       -
-
       new Date(a)
-
   );
 
 
@@ -1286,9 +1355,9 @@ function newestMeasurementTime(station) {
 
 
 
-/* ======================================================
-   MEASUREMENT BOXES
-   ====================================================== */
+/* ==========================================================
+   TEN OBSERVATION BOXES
+   ========================================================== */
 
 function renderLatestMeasurements(
   station
@@ -1300,40 +1369,22 @@ function renderLatestMeasurements(
     );
 
 
-  grid.innerHTML =
-    "";
+  grid.innerHTML = "";
 
 
-  const data =
-    station.latest_measurements
-    ||
-    {};
-
+  /*
+    This loop ALWAYS runs exactly 10 times.
+  */
 
   MEASUREMENTS.forEach(
-
     key => {
 
 
       const item =
-        data[key]
-        ||
-        {
-          label:
-            key,
-
-          unit:
-            "",
-
-          digits:
-            1,
-
-          value:
-            null,
-
-          time:
-            null
-        };
+        getLatestMeasurement(
+          station,
+          key
+        );
 
 
       const card =
@@ -1347,7 +1398,8 @@ function renderLatestMeasurements(
 
 
       if (
-        key === selectedMeasurement
+        key ===
+        selectedMeasurement
       ) {
 
         card.classList.add(
@@ -1396,28 +1448,41 @@ function renderLatestMeasurements(
         "metric-value";
 
 
-      value.innerHTML =
-
-        `${fmt(
+      const numberText =
+        fmt(
           item.value,
-          item.digits ?? 1
-        )}`
-
-        +
-
-        (
-
-          item.unit
-
-          ?
-
-          `<span class="unit">${item.unit}</span>`
-
-          :
-
-          ""
-
+          item.digits
         );
+
+
+      value.textContent =
+        numberText;
+
+
+
+      if (
+        item.unit
+      ) {
+
+        const unit =
+          document.createElement(
+            "span"
+          );
+
+
+        unit.className =
+          "unit";
+
+
+        unit.textContent =
+          item.unit;
+
+
+        value.appendChild(
+          unit
+        );
+
+      }
 
 
 
@@ -1432,17 +1497,12 @@ function renderLatestMeasurements(
 
 
       time.textContent =
-
         item.time
-
         ?
-
         formatUTC(
           item.time
         )
-
         :
-
         "No observation";
 
 
@@ -1460,7 +1520,6 @@ function renderLatestMeasurements(
       card.appendChild(
         time
       );
-
 
 
       card.onclick =
@@ -1487,45 +1546,24 @@ function renderLatestMeasurements(
       );
 
     }
-
   );
 
 }
 
 
 
-/* ======================================================
+/* ==========================================================
    SINGLE GRAPH
-   ====================================================== */
+   ========================================================== */
 
 function renderMainChart(
   station
 ) {
 
-  const item =
-    station.latest_measurements[
+  const meta =
+    META[
       selectedMeasurement
-    ]
-    ||
-    {};
-
-
-  const title =
-    item.label
-    ||
-    selectedMeasurement;
-
-
-  const unit =
-    item.unit
-    ||
-    "";
-
-
-  const digits =
-    item.digits
-    ??
-    1;
+    ];
 
 
   document
@@ -1533,8 +1571,24 @@ function renderMainChart(
       "chartTitle"
     )
     .textContent =
-      title;
+      meta.label;
 
+
+  const x =
+    station.history.map(
+      row =>
+        row.time
+    );
+
+
+  const y =
+    station.history.map(
+      row =>
+        historyValue(
+          row,
+          selectedMeasurement
+        )
+    );
 
 
   Plotly.react(
@@ -1546,18 +1600,10 @@ function renderMainChart(
       {
 
         x:
-          station.history.map(
-            row =>
-              row.time
-          ),
+          x,
 
         y:
-          station.history.map(
-            row =>
-              row[
-                selectedMeasurement
-              ]
-          ),
+          y,
 
         type:
           "scatter",
@@ -1569,20 +1615,14 @@ function renderMainChart(
           false,
 
         line: {
-          width:
-            2
+          width: 2
         },
 
         hovertemplate:
-
           "%{x|%d %b %Y %H:%M} UTC<br>"
-
           +
-
-          `%{y:.${digits}f} ${unit}`
-
+          `%{y:.${meta.digits}f} ${meta.unit}`
           +
-
           "<extra></extra>"
 
       }
@@ -1593,43 +1633,49 @@ function renderMainChart(
     {
 
       margin: {
-
-        l:
-          65,
-
-        r:
-          22,
-
-        t:
-          10,
-
-        b:
-          45
-
+        l: 58,
+        r: 16,
+        t: 6,
+        b: 35
       },
 
 
       xaxis: {
+        title: {
+          text: "UTC",
+          font: {
+            size: 9
+          }
+        },
 
-        title:
-          "Time (UTC)"
+        tickfont: {
+          size: 8
+        },
 
+        automargin: true
       },
 
 
       yaxis: {
 
-        title:
+        title: {
+          text:
+            meta.unit
+            ?
+            meta.unit
+            :
+            meta.label,
 
-          unit
+          font: {
+            size: 9
+          }
+        },
 
-          ?
+        tickfont: {
+          size: 8
+        },
 
-          `${title} (${unit})`
-
-          :
-
-          title
+        automargin: true
 
       },
 
@@ -1643,13 +1689,8 @@ function renderMainChart(
 
 
       font: {
-
         family:
-          "Inter, system-ui, sans-serif",
-
-        size:
-          10
-
+          "Inter, system-ui, sans-serif"
       },
 
 
@@ -1660,13 +1701,8 @@ function renderMainChart(
 
 
     {
-
-      responsive:
-        true,
-
-      displaylogo:
-        false
-
+      responsive: true,
+      displaylogo: false
     }
 
   );
@@ -1675,9 +1711,9 @@ function renderMainChart(
 
 
 
-/* ======================================================
+/* ==========================================================
    STATUS
-   ====================================================== */
+   ========================================================== */
 
 function renderStatus(
   station
@@ -1751,37 +1787,26 @@ function renderStatus(
 
 
 
-/* ======================================================
+/* ==========================================================
    MAP
-   ====================================================== */
+   ========================================================== */
 
 function initMap() {
 
   map =
     L.map(
-
       "map",
-
       {
-
-        zoomControl:
-          true,
-
-        scrollWheelZoom:
-          false
-
+        zoomControl: true,
+        scrollWheelZoom: false
       }
-
     )
     .setView(
-
       [
         65.69,
         -37.86
       ],
-
       11
-
     );
 
 
@@ -1790,13 +1815,10 @@ function initMap() {
     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
 
     {
-
-      maxZoom:
-        18,
+      maxZoom: 18,
 
       attribution:
         "&copy; OpenStreetMap contributors"
-
     }
 
   )
@@ -1810,7 +1832,6 @@ function initMap() {
     DATA.stations
   )
   .forEach(
-
     station => {
 
 
@@ -1823,16 +1844,9 @@ function initMap() {
           ],
 
           {
-
-            radius:
-              7,
-
-            weight:
-              2,
-
-            fillOpacity:
-              .9
-
+            radius: 6,
+            weight: 2,
+            fillOpacity: .9
           }
 
         )
@@ -1847,14 +1861,11 @@ function initMap() {
 
 
       marker.on(
-
         "click",
-
         () =>
           selectStation(
             station.id
           )
-
       );
 
 
@@ -1864,8 +1875,8 @@ function initMap() {
         marker;
 
     }
-
   );
+
 
 
   const points =
@@ -1873,15 +1884,10 @@ function initMap() {
       DATA.stations
     )
     .map(
-
       station => [
-
         station.latitude,
-
         station.longitude
-
       ]
-
     );
 
 
@@ -1890,14 +1896,10 @@ function initMap() {
   ) {
 
     map.fitBounds(
-
       points,
-
       {
-        padding:
-          [30,30]
+        padding: [20,20]
       }
-
     );
 
   }
@@ -1906,9 +1908,9 @@ function initMap() {
 
 
 
-/* ======================================================
-   STATION TABS
-   ====================================================== */
+/* ==========================================================
+   STATION BUTTONS
+   ========================================================== */
 
 function renderTabs() {
 
@@ -1926,7 +1928,6 @@ function renderTabs() {
     DATA.stations
   )
   .forEach(
-
     station => {
 
 
@@ -1937,23 +1938,15 @@ function renderTabs() {
 
 
       button.className =
-
         "station-btn"
-
         +
-
         (
-
-          station.id === activeStation
-
+          station.id ===
+          activeStation
           ?
-
           " active"
-
           :
-
           ""
-
         );
 
 
@@ -1973,33 +1966,33 @@ function renderTabs() {
       );
 
     }
-
   );
 
 }
 
 
 
-/* ======================================================
+/* ==========================================================
    SELECT STATION
-   ====================================================== */
+   ========================================================== */
 
-function selectStation(
-  id
-) {
+function selectStation(id) {
 
   if (
     !DATA.stations[id]
   ) {
-
     return;
-
   }
 
 
   activeStation =
     id;
 
+
+  /*
+    Temperature selected by default
+    every time station changes.
+  */
 
   selectedMeasurement =
     "temperature";
@@ -2049,21 +2042,22 @@ function selectStation(
     );
 
 
+  const newestText =
+    newest
+    ?
+    formatUTC(
+      newest
+    )
+    :
+    "No observations";
+
+
   document
     .getElementById(
       "latestBoxTime"
     )
     .textContent =
-
-      newest
-
-      ?
-
-      formatUTC(newest)
-
-      :
-
-      "No observations";
+      newestText;
 
 
   document
@@ -2071,16 +2065,7 @@ function selectStation(
       "latestTime"
     )
     .textContent =
-
-      newest
-
-      ?
-
-      formatUTC(newest)
-
-      :
-
-      "No observations";
+      newestText;
 
 
 
@@ -2091,17 +2076,13 @@ function selectStation(
 
 
   if (
-
     newest
-
     &&
-
     observationAgeHours(
       newest
     )
     >
     FRESH_HOURS
-
   ) {
 
     note.style.display =
@@ -2109,8 +2090,7 @@ function selectStation(
 
 
     note.textContent =
-
-      `Newest observation: ${formatUTC(newest)}. Values remain visible although transmission is delayed.`;
+      "Data transmission is delayed. Latest available values remain displayed.";
 
   }
 
@@ -2144,17 +2124,11 @@ function selectStation(
       "stationPosition"
     )
     .textContent =
-
       `${station.latitude.toFixed(4)}° N, `
-
       +
-
       `${Math.abs(station.longitude).toFixed(4)}° W · `
-
       +
-
       `${station.elevation_m} m a.s.l.`;
-
 
 
   document
@@ -2165,32 +2139,23 @@ function selectStation(
       station.source;
 
 
-
   if (
-
     map
-
     &&
-
     markers[id]
-
   ) {
 
     map.flyTo(
 
       [
-
         station.latitude,
-
         station.longitude
-
       ],
 
       12,
 
       {
-        duration:
-          .5
+        duration: .4
       }
 
     );
@@ -2205,9 +2170,9 @@ function selectStation(
 
 
 
-/* ======================================================
-   LOAD
-   ====================================================== */
+/* ==========================================================
+   LOAD DATA
+   ========================================================== */
 
 async function loadWeather() {
 
@@ -2219,8 +2184,7 @@ async function loadWeather() {
       Date.now(),
 
       {
-        cache:
-          "no-store"
+        cache: "no-store"
       }
 
     );
@@ -2267,9 +2231,7 @@ async function loadWeather() {
 
 
   if (!map) {
-
     initMap();
-
   }
 
 
@@ -2281,9 +2243,12 @@ async function loadWeather() {
 
 
 
+/* ==========================================================
+   START
+   ========================================================== */
+
 loadWeather()
   .catch(
-
     error => {
 
       console.error(
@@ -2307,7 +2272,6 @@ loadWeather()
           "dot warn";
 
     }
-
   );
 
 
@@ -2320,17 +2284,12 @@ setInterval(
         console.error
       ),
 
-  5
-  *
-  60
-  *
-  1000
+  5 * 60 * 1000
 
 );
 
 
 </script>
-
 
 </body>
 
