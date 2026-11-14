@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-11-14T11:27:08.067616+00:00",
+  "generated_at": "2026-11-14T16:01:57.832552+00:00",
   "stations": {
     "SER_B": {
+      "id": "SER_B",
       "name": "SER_B",
       "description": "Sermilik Research Station",
       "latitude": 65.6797,
       "longitude": -37.9174,
       "elevation_m": 28,
-      "id": "SER_B",
-      "source": "GEUS THREDDS",
-      "source_url": "https://thredds.geus.dk/thredds/fileServer/aws/l3sites/csv/hour/SER_B_hour.csv",
+      "source": "GEUS THREDDS L2",
+      "source_url": "https://thredds.geus.dk/thredds/fileServer/aws/l2stations/csv/hour/SER_B_hour.csv",
       "latest": {
-        "time": "2026-11-14T09:00:00+00:00",
+        "time": "2026-11-14T13:00:00+00:00",
         "temperature": null,
         "wind_speed": null,
         "wind_direction": null,
@@ -51,34 +51,6 @@
         }
       },
       "history": [
-        {
-          "time": "2026-10-15T09:00:00+00:00",
-          "temperature": 0.817,
-          "wind_speed": 4.616,
-          "pressure": 987.0,
-          "humidity": 47.23
-        },
-        {
-          "time": "2026-10-15T10:00:00+00:00",
-          "temperature": 2.15,
-          "wind_speed": 3.748,
-          "pressure": 988.0,
-          "humidity": 39.47
-        },
-        {
-          "time": "2026-10-15T11:00:00+00:00",
-          "temperature": 2.7,
-          "wind_speed": 3.783,
-          "pressure": 989.0,
-          "humidity": 38.75
-        },
-        {
-          "time": "2026-10-15T12:00:00+00:00",
-          "temperature": 3.267,
-          "wind_speed": 4.303,
-          "pressure": 989.0,
-          "humidity": 37.03
-        },
         {
           "time": "2026-10-15T13:00:00+00:00",
           "temperature": 3.65,
@@ -5093,6 +5065,34 @@
         },
         {
           "time": "2026-11-14T09:00:00+00:00",
+          "temperature": -7.2,
+          "wind_speed": 6.133,
+          "pressure": 1009.0,
+          "humidity": 58.4
+        },
+        {
+          "time": "2026-11-14T10:00:00+00:00",
+          "temperature": -6.65,
+          "wind_speed": 10.03,
+          "pressure": 1009.0,
+          "humidity": 61.4
+        },
+        {
+          "time": "2026-11-14T11:00:00+00:00",
+          "temperature": -6.05,
+          "wind_speed": 8.94,
+          "pressure": 1009.0,
+          "humidity": 53.1
+        },
+        {
+          "time": "2026-11-14T12:00:00+00:00",
+          "temperature": -5.933,
+          "wind_speed": 6.652,
+          "pressure": 1008.0,
+          "humidity": 51.43
+        },
+        {
+          "time": "2026-11-14T13:00:00+00:00",
           "temperature": null,
           "wind_speed": null,
           "pressure": null,
@@ -5101,16 +5101,16 @@
       ]
     },
     "MIT_B": {
+      "id": "MIT_B",
       "name": "MIT_B",
       "description": "Mittivakkat bedrock station",
       "latitude": 65.7061,
       "longitude": -37.8115,
       "elevation_m": 519,
-      "id": "MIT_B",
-      "source": "GEUS THREDDS",
-      "source_url": "https://thredds.geus.dk/thredds/fileServer/aws/l3sites/csv/hour/MIT_B_hour.csv",
+      "source": "GEUS THREDDS L2",
+      "source_url": "https://thredds.geus.dk/thredds/fileServer/aws/l2stations/csv/hour/MIT_B_hour.csv",
       "latest": {
-        "time": "2026-11-14T08:00:00+00:00",
+        "time": "2026-11-14T13:00:00+00:00",
         "temperature": null,
         "wind_speed": null,
         "wind_direction": null,
@@ -5150,41 +5150,6 @@
         }
       },
       "history": [
-        {
-          "time": "2026-10-15T08:00:00+00:00",
-          "temperature": -3.3,
-          "wind_speed": 4.57,
-          "pressure": 926.0,
-          "humidity": 54.52
-        },
-        {
-          "time": "2026-10-15T09:00:00+00:00",
-          "temperature": -1.417,
-          "wind_speed": 6.561,
-          "pressure": 927.0,
-          "humidity": 42.6
-        },
-        {
-          "time": "2026-10-15T10:00:00+00:00",
-          "temperature": -0.8,
-          "wind_speed": 4.255,
-          "pressure": 928.0,
-          "humidity": 40.12
-        },
-        {
-          "time": "2026-10-15T11:00:00+00:00",
-          "temperature": -0.467,
-          "wind_speed": 1.937,
-          "pressure": 929.0,
-          "humidity": 40.0
-        },
-        {
-          "time": "2026-10-15T12:00:00+00:00",
-          "temperature": 0.117,
-          "wind_speed": null,
-          "pressure": 930.0,
-          "humidity": 39.38
-        },
         {
           "time": "2026-10-15T13:00:00+00:00",
           "temperature": 0.317,
@@ -10196,18 +10161,53 @@
           "wind_speed": null,
           "pressure": null,
           "humidity": null
+        },
+        {
+          "time": "2026-11-14T09:00:00+00:00",
+          "temperature": -8.67,
+          "wind_speed": 1.234,
+          "pressure": 947.0,
+          "humidity": 47.32
+        },
+        {
+          "time": "2026-11-14T10:00:00+00:00",
+          "temperature": null,
+          "wind_speed": null,
+          "pressure": null,
+          "humidity": null
+        },
+        {
+          "time": "2026-11-14T11:00:00+00:00",
+          "temperature": -8.48,
+          "wind_speed": 1.622,
+          "pressure": 947.0,
+          "humidity": 52.28
+        },
+        {
+          "time": "2026-11-14T12:00:00+00:00",
+          "temperature": -6.533,
+          "wind_speed": 1.166,
+          "pressure": 946.0,
+          "humidity": 39.07
+        },
+        {
+          "time": "2026-11-14T13:00:00+00:00",
+          "temperature": null,
+          "wind_speed": null,
+          "pressure": null,
+          "humidity": null
         }
       ]
     },
     "MIT": {
+      "id": "MIT",
       "name": "MIT",
       "description": "Mittivakkat Glacier",
       "latitude": 65.6919,
       "longitude": -37.8303,
       "elevation_m": 422,
-      "id": "MIT",
-      "source": "GEUS THREDDS",
-      "source_url": "https://thredds.geus.dk/thredds/fileServer/aws/l3sites/csv/hour/MIT_hour.csv",
+      "source": "GEUS THREDDS L2",
+      "source_url": "https://thredds.geus.dk/thredds/fileServer/aws/l2stations/csv/hour/MIT_hour.csv",
       "latest": {
         "time": "2026-11-14T00:00:00+00:00",
         "temperature": null,
