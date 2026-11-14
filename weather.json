@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-14T17:59:28.851151+00:00",
+  "generated_at": "2026-11-14T18:29:43.889506+00:00",
   "stations": {
     "SER_B": {
       "id": "SER_B",
@@ -11,7 +11,7 @@
       "source": "GEUS THREDDS L2",
       "source_url": "https://thredds.geus.dk/thredds/fileServer/aws/l2stations/csv/hour/SER_B_hour.csv",
       "latest": {
-        "time": "2026-11-14T15:00:00+00:00",
+        "time": "2026-11-14T16:00:00+00:00",
         "temperature": null,
         "wind_speed": null,
         "wind_direction": null,
@@ -51,13 +51,6 @@
         }
       },
       "history": [
-        {
-          "time": "2026-10-15T15:00:00+00:00",
-          "temperature": 3.867,
-          "wind_speed": 3.537,
-          "pressure": 992.0,
-          "humidity": 32.62
-        },
         {
           "time": "2026-10-15T16:00:00+00:00",
           "temperature": 3.45,
@@ -5086,13 +5079,20 @@
         },
         {
           "time": "2026-11-14T14:00:00+00:00",
-          "temperature": null,
+          "temperature": -3.683,
           "wind_speed": 7.027,
           "pressure": 1007.0,
-          "humidity": null
+          "humidity": 44.43
         },
         {
           "time": "2026-11-14T15:00:00+00:00",
+          "temperature": -4.117,
+          "wind_speed": 1.664,
+          "pressure": 1008.0,
+          "humidity": 50.43
+        },
+        {
+          "time": "2026-11-14T16:00:00+00:00",
           "temperature": null,
           "wind_speed": null,
           "pressure": null,
