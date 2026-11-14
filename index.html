@@ -1,41 +1,75 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sermilik & Mittivakkat Weather</title>
 
-  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+<head>
+
+  <meta charset="utf-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+
+  <title>
+    Sermilik & Mittivakkat Weather
+  </title>
+
+
+  <script
+    src="https://cdn.plot.ly/plotly-2.35.2.min.js">
+  </script>
+
 
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
   >
 
+
   <script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-  ></script>
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+  </script>
+
 
   <style>
+
     :root {
+
       --bg: #eef3f7;
+
       --panel: rgba(255,255,255,.95);
+
       --text: #102333;
+
       --muted: #657381;
+
       --line: #dce5eb;
+
       --accent: #19647e;
+
       --accent-soft: #dceef4;
+
       --good: #16875f;
+
       --warn: #d39119;
-      --shadow: 0 12px 35px rgba(28,55,75,.08);
+
+      --shadow:
+        0 12px 35px rgba(28,55,75,.08);
+
     }
+
 
     * {
+
       box-sizing: border-box;
+
     }
 
+
     body {
+
       margin: 0;
+
       font-family:
         Inter,
         ui-sans-serif,
@@ -44,617 +78,1967 @@
         BlinkMacSystemFont,
         "Segoe UI",
         sans-serif;
+
       background:
-        radial-gradient(circle at top right, #d7eaf2 0, transparent 32rem),
+
+        radial-gradient(
+          circle at top right,
+          #d7eaf2 0,
+          transparent 32rem
+        ),
+
         var(--bg);
-      color: var(--text);
+
+      color:
+        var(--text);
+
     }
+
 
     .page {
+
       max-width: 1220px;
+
       margin: 0 auto;
-      padding: 34px 18px 70px;
+
+      padding:
+        34px 18px 70px;
+
     }
+
 
     header {
+
       display: flex;
-      justify-content: space-between;
+
+      justify-content:
+        space-between;
+
       gap: 24px;
-      align-items: flex-start;
-      margin-bottom: 22px;
+
+      align-items:
+        flex-start;
+
+      margin-bottom:
+        22px;
+
     }
+
 
     .eyebrow {
-      text-transform: uppercase;
-      letter-spacing: .13em;
-      font-size: 12px;
-      font-weight: 800;
-      color: var(--accent);
-      margin-bottom: 7px;
+
+      text-transform:
+        uppercase;
+
+      letter-spacing:
+        .13em;
+
+      font-size:
+        12px;
+
+      font-weight:
+        800;
+
+      color:
+        var(--accent);
+
+      margin-bottom:
+        7px;
+
     }
+
 
     h1 {
+
       margin: 0;
-      font-size: clamp(31px, 5vw, 55px);
-      letter-spacing: -.045em;
-      line-height: 1;
+
+      font-size:
+        clamp(
+          31px,
+          5vw,
+          55px
+        );
+
+      letter-spacing:
+        -.045em;
+
+      line-height:
+        1;
+
     }
+
 
     .subtitle {
-      margin-top: 10px;
-      color: var(--muted);
-      max-width: 680px;
-      line-height: 1.45;
+
+      margin-top:
+        10px;
+
+      color:
+        var(--muted);
+
+      max-width:
+        680px;
+
+      line-height:
+        1.45;
+
     }
+
 
     .status-pill {
-      border: 1px solid var(--line);
-      background: white;
-      box-shadow: var(--shadow);
-      border-radius: 999px;
-      padding: 10px 14px;
-      font-size: 13px;
-      font-weight: 800;
-      white-space: nowrap;
+
+      border:
+        1px solid var(--line);
+
+      background:
+        white;
+
+      box-shadow:
+        var(--shadow);
+
+      border-radius:
+        999px;
+
+      padding:
+        10px 14px;
+
+      font-size:
+        13px;
+
+      font-weight:
+        800;
+
+      white-space:
+        nowrap;
+
     }
+
 
     .dot {
-      width: 9px;
-      height: 9px;
-      display: inline-block;
-      border-radius: 50%;
-      background: #9ca3af;
-      margin-right: 7px;
+
+      width:
+        9px;
+
+      height:
+        9px;
+
+      display:
+        inline-block;
+
+      border-radius:
+        50%;
+
+      background:
+        #9ca3af;
+
+      margin-right:
+        7px;
+
     }
+
 
     .dot.good {
-      background: var(--good);
+
+      background:
+        var(--good);
+
     }
+
 
     .dot.warn {
-      background: var(--warn);
+
+      background:
+        var(--warn);
+
     }
+
 
     .station-tabs {
-      display: flex;
-      gap: 9px;
-      flex-wrap: wrap;
-      margin-bottom: 18px;
+
+      display:
+        flex;
+
+      gap:
+        9px;
+
+      flex-wrap:
+        wrap;
+
+      margin-bottom:
+        18px;
+
     }
+
 
     .station-btn {
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,.75);
-      color: var(--text);
-      padding: 10px 17px;
-      border-radius: 999px;
-      font: inherit;
-      font-weight: 750;
-      cursor: pointer;
+
+      border:
+        1px solid var(--line);
+
+      background:
+        rgba(255,255,255,.75);
+
+      color:
+        var(--text);
+
+      padding:
+        10px 17px;
+
+      border-radius:
+        999px;
+
+      font:
+        inherit;
+
+      font-weight:
+        750;
+
+      cursor:
+        pointer;
+
     }
+
+
+    .station-btn:hover {
+
+      transform:
+        translateY(-1px);
+
+    }
+
 
     .station-btn.active {
-      background: var(--text);
-      color: white;
-      border-color: var(--text);
+
+      background:
+        var(--text);
+
+      color:
+        white;
+
+      border-color:
+        var(--text);
+
     }
+
 
     .layout {
-      display: grid;
-      grid-template-columns: minmax(0, 1.65fr) minmax(300px, .85fr);
-      gap: 17px;
+
+      display:
+        grid;
+
+      grid-template-columns:
+        minmax(0, 1.65fr)
+        minmax(300px, .85fr);
+
+      gap:
+        17px;
+
     }
+
 
     .panel {
-      background: var(--panel);
-      border: 1px solid rgba(214,225,232,.9);
-      border-radius: 22px;
-      box-shadow: var(--shadow);
-      overflow: hidden;
+
+      background:
+        var(--panel);
+
+      border:
+        1px solid
+        rgba(214,225,232,.9);
+
+      border-radius:
+        22px;
+
+      box-shadow:
+        var(--shadow);
+
+      overflow:
+        hidden;
+
     }
+
 
     .panel-pad {
-      padding: 20px;
+
+      padding:
+        20px;
+
     }
+
 
     .section-title {
-      font-size: 14px;
-      font-weight: 800;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      margin-bottom: 14px;
+
+      font-size:
+        14px;
+
+      font-weight:
+        800;
+
+      color:
+        var(--muted);
+
+      text-transform:
+        uppercase;
+
+      letter-spacing:
+        .08em;
+
+      margin-bottom:
+        8px;
+
     }
+
+
+    .latest-time-line {
+
+      color:
+        var(--muted);
+
+      font-size:
+        13px;
+
+      font-weight:
+        650;
+
+      margin-bottom:
+        16px;
+
+    }
+
+
+    .latest-time-line strong {
+
+      color:
+        var(--text);
+
+      font-weight:
+        750;
+
+    }
+
 
     .current-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
+
+      display:
+        grid;
+
+      grid-template-columns:
+        repeat(3, 1fr);
+
+      gap:
+        12px;
+
     }
+
 
     .metric {
-      background: rgba(247,250,252,.9);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 18px;
+
+      background:
+        rgba(247,250,252,.9);
+
+      border:
+        1px solid var(--line);
+
+      border-radius:
+        18px;
+
+      padding:
+        18px;
+
     }
+
 
     .metric-label {
-      color: var(--muted);
-      font-size: 13px;
-      font-weight: 700;
-      margin-bottom: 7px;
+
+      color:
+        var(--muted);
+
+      font-size:
+        13px;
+
+      font-weight:
+        700;
+
+      margin-bottom:
+        7px;
+
     }
+
 
     .metric-value {
-      font-size: clamp(29px, 4vw, 42px);
-      font-weight: 780;
-      letter-spacing: -.04em;
+
+      font-size:
+        clamp(
+          29px,
+          4vw,
+          42px
+        );
+
+      font-weight:
+        780;
+
+      letter-spacing:
+        -.04em;
+
     }
+
 
     .unit {
-      color: var(--muted);
-      font-size: 15px;
-      font-weight: 650;
-      margin-left: 3px;
+
+      color:
+        var(--muted);
+
+      font-size:
+        15px;
+
+      font-weight:
+        650;
+
+      margin-left:
+        3px;
+
     }
+
 
     .stale-note {
-      display: none;
-      margin-top: 14px;
-      padding: 11px 14px;
-      border-radius: 14px;
-      background: #fff5dd;
-      color: #835f13;
-      border: 1px solid #f1d89d;
-      font-size: 13px;
-      line-height: 1.45;
+
+      display:
+        none;
+
+      margin-top:
+        14px;
+
+      padding:
+        11px 14px;
+
+      border-radius:
+        14px;
+
+      background:
+        #fff5dd;
+
+      color:
+        #835f13;
+
+      border:
+        1px solid #f1d89d;
+
+      font-size:
+        13px;
+
+      line-height:
+        1.45;
+
     }
+
 
     .extrema-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-top: 12px;
+
+      display:
+        grid;
+
+      grid-template-columns:
+        repeat(3, 1fr);
+
+      gap:
+        12px;
+
+      margin-top:
+        12px;
+
     }
+
 
     .extrema-card {
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 16px;
-      background: white;
+
+      border:
+        1px solid var(--line);
+
+      border-radius:
+        18px;
+
+      padding:
+        16px;
+
+      background:
+        white;
+
     }
+
 
     .extrema-name {
-      font-size: 14px;
-      font-weight: 800;
-      margin-bottom: 13px;
+
+      font-size:
+        14px;
+
+      font-weight:
+        800;
+
+      margin-bottom:
+        13px;
+
     }
+
 
     .period {
-      display: grid;
-      grid-template-columns: 58px 1fr 1fr;
-      gap: 6px;
-      align-items: baseline;
-      font-size: 13px;
-      padding: 7px 0;
-      border-top: 1px solid #edf1f4;
+
+      display:
+        grid;
+
+      grid-template-columns:
+        58px 1fr 1fr;
+
+      gap:
+        6px;
+
+      align-items:
+        baseline;
+
+      font-size:
+        13px;
+
+      padding:
+        7px 0;
+
+      border-top:
+        1px solid #edf1f4;
+
     }
+
 
     .period:first-of-type {
-      border-top: 0;
+
+      border-top:
+        0;
+
     }
 
+
     .period-name {
-      color: var(--muted);
+
+      color:
+        var(--muted);
+
     }
+
 
     .lo,
     .hi {
-      font-weight: 750;
-      text-align: right;
+
+      font-weight:
+        750;
+
+      text-align:
+        right;
+
     }
+
 
     .map-panel {
-      min-height: 100%;
-      display: flex;
-      flex-direction: column;
+
+      min-height:
+        100%;
+
+      display:
+        flex;
+
+      flex-direction:
+        column;
+
     }
+
 
     #map {
-      min-height: 415px;
-      flex: 1;
+
+      min-height:
+        415px;
+
+      flex:
+        1;
+
     }
+
 
     .station-info {
-      padding: 17px 19px;
-      border-top: 1px solid var(--line);
-      background: white;
+
+      padding:
+        17px 19px;
+
+      border-top:
+        1px solid var(--line);
+
+      background:
+        white;
+
     }
+
 
     .station-info strong {
-      display: block;
-      font-size: 19px;
-      margin-bottom: 4px;
+
+      display:
+        block;
+
+      font-size:
+        19px;
+
+      margin-bottom:
+        4px;
+
     }
+
 
     .station-meta {
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.55;
+
+      color:
+        var(--muted);
+
+      font-size:
+        13px;
+
+      line-height:
+        1.55;
+
     }
+
 
     .charts {
-      margin-top: 17px;
-      display: grid;
-      gap: 17px;
+
+      margin-top:
+        17px;
+
+      display:
+        grid;
+
+      gap:
+        17px;
+
     }
+
 
     .chart {
-      height: 315px;
+
+      height:
+        315px;
+
     }
+
 
     .footer-meta {
-      margin-top: 17px;
-      color: var(--muted);
-      font-size: 12.5px;
-      line-height: 1.6;
-      padding: 0 4px;
+
+      margin-top:
+        17px;
+
+      color:
+        var(--muted);
+
+      font-size:
+        12.5px;
+
+      line-height:
+        1.6;
+
+      padding:
+        0 4px;
+
     }
+
 
     .source-badge {
-      display: inline-block;
-      margin-top: 5px;
-      background: var(--accent-soft);
-      color: var(--accent);
-      padding: 4px 8px;
-      border-radius: 999px;
-      font-weight: 750;
+
+      display:
+        inline-block;
+
+      margin-top:
+        5px;
+
+      background:
+        var(--accent-soft);
+
+      color:
+        var(--accent);
+
+      padding:
+        4px 8px;
+
+      border-radius:
+        999px;
+
+      font-weight:
+        750;
+
     }
 
-    @media (max-width: 900px) {
+
+    @media
+    (max-width: 900px) {
+
       .layout {
-        grid-template-columns: 1fr;
+
+        grid-template-columns:
+          1fr;
+
       }
+
 
       .current-grid,
       .extrema-grid {
-        grid-template-columns: 1fr;
+
+        grid-template-columns:
+          1fr;
+
       }
+
 
       #map {
-        min-height: 360px;
+
+        min-height:
+          360px;
+
       }
+
 
       header {
-        flex-direction: column;
+
+        flex-direction:
+          column;
+
       }
+
     }
+
   </style>
+
 </head>
 
+
 <body>
+
+
 <div class="page">
 
+
   <header>
+
+
     <div>
-      <div class="eyebrow">Southeast Greenland AWS network</div>
-      <h1 id="pageTitle">Weather dashboard</h1>
-      <div class="subtitle" id="pageSubtitle">
-        Hourly observations from GEUS / PROMICE.
+
+
+      <div class="eyebrow">
+
+        Southeast Greenland AWS network
+
       </div>
+
+
+      <h1 id="pageTitle">
+
+        Weather dashboard
+
+      </h1>
+
+
+      <div
+        class="subtitle"
+        id="pageSubtitle"
+      >
+
+        Hourly observations from GEUS / PROMICE.
+
+      </div>
+
+
     </div>
+
 
     <div class="status-pill">
-      <span id="statusDot" class="dot"></span>
-      <span id="statusText">Loading data…</span>
+
+
+      <span
+        id="statusDot"
+        class="dot">
+      </span>
+
+
+      <span id="statusText">
+
+        Loading data…
+
+      </span>
+
+
     </div>
+
+
   </header>
 
-  <div class="station-tabs" id="stationTabs"></div>
+
+
+  <div
+    class="station-tabs"
+    id="stationTabs">
+  </div>
+
+
 
   <div class="layout">
 
+
     <div class="panel panel-pad">
-      <div class="section-title">Latest observation</div>
+
+
+      <div class="section-title">
+
+        Latest observation
+
+      </div>
+
+
+      <div class="latest-time-line">
+
+        Measurement time:
+
+        <strong id="latestBoxTime">
+
+          —
+
+        </strong>
+
+      </div>
+
+
 
       <div class="current-grid">
 
-        <div class="metric">
-          <div class="metric-label">Air temperature</div>
-          <div class="metric-value">
-            <span id="temperature">—</span>
-            <span class="unit">°C</span>
-          </div>
-        </div>
 
         <div class="metric">
-          <div class="metric-label">Wind speed</div>
-          <div class="metric-value">
-            <span id="wind">—</span>
-            <span class="unit">m/s</span>
+
+
+          <div class="metric-label">
+
+            Air temperature
+
           </div>
+
+
+          <div class="metric-value">
+
+            <span id="temperature">
+
+              —
+
+            </span>
+
+            <span class="unit">
+
+              °C
+
+            </span>
+
+          </div>
+
+
         </div>
 
+
+
         <div class="metric">
-          <div class="metric-label">Air pressure</div>
-          <div class="metric-value">
-            <span id="pressure">—</span>
-            <span class="unit">hPa</span>
+
+
+          <div class="metric-label">
+
+            Wind speed
+
           </div>
+
+
+          <div class="metric-value">
+
+            <span id="wind">
+
+              —
+
+            </span>
+
+            <span class="unit">
+
+              m/s
+
+            </span>
+
+          </div>
+
+
         </div>
+
+
+
+        <div class="metric">
+
+
+          <div class="metric-label">
+
+            Air pressure
+
+          </div>
+
+
+          <div class="metric-value">
+
+            <span id="pressure">
+
+              —
+
+            </span>
+
+            <span class="unit">
+
+              hPa
+
+            </span>
+
+          </div>
+
+
+        </div>
+
 
       </div>
 
-      <div class="stale-note" id="staleNote"></div>
 
-      <div class="section-title" style="margin-top:25px">
+
+      <div
+        class="stale-note"
+        id="staleNote">
+      </div>
+
+
+
+      <div
+        class="section-title"
+        style="margin-top:25px"
+      >
+
         Weekly & monthly range
+
       </div>
+
+
 
       <div class="extrema-grid">
 
-        <div class="extrema-card">
-          <div class="extrema-name">Temperature</div>
-
-          <div class="period">
-            <span class="period-name">7 days</span>
-            <span class="lo" id="tempWeekMin">—</span>
-            <span class="hi" id="tempWeekMax">—</span>
-          </div>
-
-          <div class="period">
-            <span class="period-name">30 days</span>
-            <span class="lo" id="tempMonthMin">—</span>
-            <span class="hi" id="tempMonthMax">—</span>
-          </div>
-        </div>
 
         <div class="extrema-card">
-          <div class="extrema-name">Wind speed</div>
 
-          <div class="period">
-            <span class="period-name">7 days</span>
-            <span class="lo" id="windWeekMin">—</span>
-            <span class="hi" id="windWeekMax">—</span>
+
+          <div class="extrema-name">
+
+            Temperature
+
           </div>
 
+
           <div class="period">
-            <span class="period-name">30 days</span>
-            <span class="lo" id="windMonthMin">—</span>
-            <span class="hi" id="windMonthMax">—</span>
+
+            <span class="period-name">
+
+              7 days
+
+            </span>
+
+            <span
+              class="lo"
+              id="tempWeekMin">
+
+              —
+
+            </span>
+
+            <span
+              class="hi"
+              id="tempWeekMax">
+
+              —
+
+            </span>
+
           </div>
+
+
+          <div class="period">
+
+            <span class="period-name">
+
+              30 days
+
+            </span>
+
+            <span
+              class="lo"
+              id="tempMonthMin">
+
+              —
+
+            </span>
+
+            <span
+              class="hi"
+              id="tempMonthMax">
+
+              —
+
+            </span>
+
+          </div>
+
+
         </div>
+
+
 
         <div class="extrema-card">
-          <div class="extrema-name">Air pressure</div>
 
-          <div class="period">
-            <span class="period-name">7 days</span>
-            <span class="lo" id="pressureWeekMin">—</span>
-            <span class="hi" id="pressureWeekMax">—</span>
+
+          <div class="extrema-name">
+
+            Wind speed
+
           </div>
 
+
           <div class="period">
-            <span class="period-name">30 days</span>
-            <span class="lo" id="pressureMonthMin">—</span>
-            <span class="hi" id="pressureMonthMax">—</span>
+
+            <span class="period-name">
+
+              7 days
+
+            </span>
+
+            <span
+              class="lo"
+              id="windWeekMin">
+
+              —
+
+            </span>
+
+            <span
+              class="hi"
+              id="windWeekMax">
+
+              —
+
+            </span>
+
           </div>
+
+
+          <div class="period">
+
+            <span class="period-name">
+
+              30 days
+
+            </span>
+
+            <span
+              class="lo"
+              id="windMonthMin">
+
+              —
+
+            </span>
+
+            <span
+              class="hi"
+              id="windMonthMax">
+
+              —
+
+            </span>
+
+          </div>
+
+
         </div>
+
+
+
+        <div class="extrema-card">
+
+
+          <div class="extrema-name">
+
+            Air pressure
+
+          </div>
+
+
+          <div class="period">
+
+            <span class="period-name">
+
+              7 days
+
+            </span>
+
+            <span
+              class="lo"
+              id="pressureWeekMin">
+
+              —
+
+            </span>
+
+            <span
+              class="hi"
+              id="pressureWeekMax">
+
+              —
+
+            </span>
+
+          </div>
+
+
+          <div class="period">
+
+            <span class="period-name">
+
+              30 days
+
+            </span>
+
+            <span
+              class="lo"
+              id="pressureMonthMin">
+
+              —
+
+            </span>
+
+            <span
+              class="hi"
+              id="pressureMonthMax">
+
+              —
+
+            </span>
+
+          </div>
+
+
+        </div>
+
 
       </div>
+
+
     </div>
+
+
 
     <div class="panel map-panel">
-      <div id="map"></div>
+
+
+      <div id="map">
+      </div>
+
 
       <div class="station-info">
-        <strong id="stationName">—</strong>
+
+
+        <strong id="stationName">
+
+          —
+
+        </strong>
+
 
         <div class="station-meta">
-          <span id="stationDescription">—</span><br>
-          <span id="stationPosition">—</span><br>
+
+
+          <span id="stationDescription">
+
+            —
+
+          </span>
+
+
+          <br>
+
+
+          <span id="stationPosition">
+
+            —
+
+          </span>
+
+
+          <br>
+
 
           Latest available observation:
-          <span id="latestTime">—</span><br>
 
-          <span id="sourceBadge" class="source-badge">—</span>
+          <span id="latestTime">
+
+            —
+
+          </span>
+
+
+          <br>
+
+
+          <span
+            id="sourceBadge"
+            class="source-badge">
+
+            —
+
+          </span>
+
+
         </div>
+
+
       </div>
+
+
     </div>
 
+
   </div>
+
+
 
   <div class="charts">
 
-    <div class="panel">
-      <div id="tempChart" class="chart"></div>
-    </div>
 
     <div class="panel">
-      <div id="windChart" class="chart"></div>
+
+      <div
+        id="tempChart"
+        class="chart">
+      </div>
+
     </div>
 
+
+
     <div class="panel">
-      <div id="pressureChart" class="chart"></div>
+
+      <div
+        id="windChart"
+        class="chart">
+      </div>
+
     </div>
+
+
+
+    <div class="panel">
+
+      <div
+        id="pressureChart"
+        class="chart">
+      </div>
+
+    </div>
+
 
   </div>
+
+
 
   <div class="footer-meta">
-    Dashboard generated from GEUS / PROMICE hourly AWS products.<br>
-    All times shown are UTC.<br>
+
+
+    Dashboard generated from
+    GEUS / PROMICE hourly AWS products.
+
+
+    <br>
+
+
+    All times shown are UTC.
+
+
+    <br>
+
+
     Dashboard data generated:
-    <span id="generatedTime">—</span>
+
+    <span id="generatedTime">
+
+      —
+
+    </span>
+
+
   </div>
+
 
 </div>
 
+
+
 <script>
+
 
 const FRESH_HOURS = 5;
 
+
 let DATA = null;
+
 let activeStation = "SER_B";
+
 let map = null;
+
 let markers = {};
 
-const fmt = (value, digits = 1) => {
+
+
+const fmt = (
+  value,
+  digits = 1
+) => {
+
+
   if (
+
     value === null ||
+
     value === undefined ||
-    Number.isNaN(Number(value))
+
+    Number.isNaN(
+      Number(value)
+    )
+
   ) {
+
     return "—";
+
   }
 
-  return Number(value).toFixed(digits);
+
+  return Number(value)
+    .toFixed(digits);
+
 };
 
-const withUnit = (value, unit, digits = 1) => {
+
+
+const withUnit = (
+  value,
+  unit,
+  digits = 1
+) => {
+
+
   if (
+
     value === null ||
+
     value === undefined ||
-    Number.isNaN(Number(value))
+
+    Number.isNaN(
+      Number(value)
+    )
+
   ) {
+
     return "—";
+
   }
 
-  return `${fmt(value, digits)} ${unit}`;
-};
-
-function observationAgeHours(timestamp) {
-  const time = new Date(timestamp).getTime();
-
-  if (!Number.isFinite(time)) {
-    return Infinity;
-  }
-
-  return (Date.now() - time) / 3600000;
-}
-
-function formatUTC(timestamp) {
-  const date = new Date(timestamp);
-
-  if (Number.isNaN(date.getTime())) {
-    return "Unknown";
-  }
 
   return (
-    date.toLocaleString(
-      "en-GB",
-      {
-        timeZone: "UTC",
-        year: "numeric",
-        month: "short",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: false
-      }
-    ) + " UTC"
+    `${fmt(
+      value,
+      digits
+    )} ${unit}`
   );
-}
 
-function statusFromTime(timestamp) {
-  const ageHours = observationAgeHours(timestamp);
+};
 
-  const dot = document.getElementById("statusDot");
-  const text = document.getElementById("statusText");
 
-  dot.className = "dot";
 
-  if (ageHours <= FRESH_HOURS) {
-    dot.classList.add("good");
-    text.textContent = "LIVE";
-  } else {
-    dot.classList.add("warn");
-    text.textContent = "DELAYED";
+function observationAgeHours(
+  timestamp
+) {
+
+
+  const time =
+    new Date(
+      timestamp
+    )
+    .getTime();
+
+
+  if (
+    !Number.isFinite(time)
+  ) {
+
+    return Infinity;
+
   }
+
+
+  return (
+    Date.now() - time
+  )
+  /
+  3600000;
+
 }
+
+
+
+function formatUTC(
+  timestamp
+) {
+
+
+  const date =
+    new Date(
+      timestamp
+    );
+
+
+  if (
+    Number.isNaN(
+      date.getTime()
+    )
+  ) {
+
+    return "Unknown";
+
+  }
+
+
+  return (
+
+    date.toLocaleString(
+
+      "en-GB",
+
+      {
+
+        timeZone:
+          "UTC",
+
+        year:
+          "numeric",
+
+        month:
+          "short",
+
+        day:
+          "2-digit",
+
+        hour:
+          "2-digit",
+
+        minute:
+          "2-digit",
+
+        hour12:
+          false
+
+      }
+
+    )
+
+    +
+
+    " UTC"
+
+  );
+
+}
+
+
+
+function newestValidHistoryValue(
+  station,
+  variable
+) {
+
+
+  if (
+    !Array.isArray(
+      station.history
+    )
+  ) {
+
+    return null;
+
+  }
+
+
+  for (
+
+    let i =
+      station.history.length - 1;
+
+    i >= 0;
+
+    i--
+
+  ) {
+
+
+    const row =
+      station.history[i];
+
+
+    const value =
+      row[variable];
+
+
+    if (
+
+      value !== null &&
+
+      value !== undefined &&
+
+      !Number.isNaN(
+        Number(value)
+      )
+
+    ) {
+
+
+      return {
+
+        value:
+          Number(value),
+
+        time:
+          row.time
+
+      };
+
+    }
+
+  }
+
+
+  return null;
+
+}
+
+
+
+function getLatestDisplayValue(
+  station,
+  variable
+) {
+
+
+  const directValue =
+    station.latest?.[
+      variable
+    ];
+
+
+  const directTime =
+    station.latest?.time;
+
+
+  if (
+
+    directValue !== null &&
+
+    directValue !== undefined &&
+
+    !Number.isNaN(
+      Number(directValue)
+    ) &&
+
+    directTime
+
+  ) {
+
+
+    return {
+
+      value:
+        Number(
+          directValue
+        ),
+
+      time:
+        directTime
+
+    };
+
+  }
+
+
+  return (
+    newestValidHistoryValue(
+      station,
+      variable
+    )
+  );
+
+}
+
+
+
+function newestMeasurementTime(
+  station
+) {
+
+
+  const candidates = [
+
+    getLatestDisplayValue(
+      station,
+      "temperature"
+    ),
+
+    getLatestDisplayValue(
+      station,
+      "wind_speed"
+    ),
+
+    getLatestDisplayValue(
+      station,
+      "pressure"
+    )
+
+  ]
+  .filter(Boolean);
+
+
+  if (
+    candidates.length === 0
+  ) {
+
+    return (
+      station.latest?.time
+      ||
+      null
+    );
+
+  }
+
+
+  return candidates
+
+    .map(
+      item =>
+        item.time
+    )
+
+    .sort(
+      (a, b) =>
+        new Date(b)
+        -
+        new Date(a)
+    )[0];
+
+}
+
+
+
+function statusFromTime(
+  timestamp
+) {
+
+
+  const ageHours =
+    observationAgeHours(
+      timestamp
+    );
+
+
+  const dot =
+    document.getElementById(
+      "statusDot"
+    );
+
+
+  const text =
+    document.getElementById(
+      "statusText"
+    );
+
+
+  dot.className =
+    "dot";
+
+
+  if (
+    ageHours <= FRESH_HOURS
+  ) {
+
+
+    dot.classList.add(
+      "good"
+    );
+
+
+    text.textContent =
+      "LIVE";
+
+
+  } else {
+
+
+    dot.classList.add(
+      "warn"
+    );
+
+
+    text.textContent =
+      "DELAYED";
+
+  }
+
+}
+
+
 
 function initMap() {
-  map = L.map(
-    "map",
-    {
-      zoomControl: true,
-      scrollWheelZoom: false
-    }
-  ).setView([65.69, -37.86], 11);
+
+
+  map =
+    L.map(
+
+      "map",
+
+      {
+
+        zoomControl:
+          true,
+
+        scrollWheelZoom:
+          false
+
+      }
+
+    )
+    .setView(
+
+      [
+        65.69,
+        -37.86
+      ],
+
+      11
+
+    );
+
 
   L.tileLayer(
+
     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+
     {
-      maxZoom: 18,
-      attribution: "&copy; OpenStreetMap contributors"
+
+      maxZoom:
+        18,
+
+      attribution:
+        "&copy; OpenStreetMap contributors"
+
     }
-  ).addTo(map);
 
-  Object.values(DATA.stations).forEach(station => {
-    const marker = L.circleMarker(
-      [station.latitude, station.longitude],
-      {
-        radius: 8,
-        weight: 2,
-        fillOpacity: .9
-      }
-    ).addTo(map);
+  )
+  .addTo(map);
 
-    marker.bindTooltip(
-      station.name,
-      {
-        direction: "top"
+
+
+  Object
+    .values(
+      DATA.stations
+    )
+    .forEach(
+
+      station => {
+
+
+        const marker =
+          L.circleMarker(
+
+            [
+
+              station.latitude,
+
+              station.longitude
+
+            ],
+
+            {
+
+              radius:
+                8,
+
+              weight:
+                2,
+
+              fillOpacity:
+                .9
+
+            }
+
+          )
+          .addTo(map);
+
+
+        marker.bindTooltip(
+
+          station.name,
+
+          {
+
+            direction:
+              "top"
+
+          }
+
+        );
+
+
+        marker.on(
+
+          "click",
+
+          () =>
+            selectStation(
+              station.id
+            )
+
+        );
+
+
+        markers[
+          station.id
+        ] =
+          marker;
+
       }
+
     );
 
-    marker.on(
-      "click",
-      () => selectStation(station.id)
-    );
 
-    markers[station.id] = marker;
-  });
+  const points =
+    Object
+      .values(
+        DATA.stations
+      )
+      .map(
 
-  const points = Object.values(DATA.stations).map(
-    station => [
-      station.latitude,
-      station.longitude
-    ]
-  );
+        station => [
 
-  if (points.length > 1) {
-    map.fitBounds(
-      points,
-      {
-        padding: [35, 35]
-      }
-    );
-  }
-}
+          station.latitude,
 
-function renderTabs() {
-  const holder = document.getElementById("stationTabs");
+          station.longitude
 
-  holder.innerHTML = "";
+        ]
 
-  Object.values(DATA.stations).forEach(station => {
-    const button = document.createElement("button");
-
-    button.className =
-      "station-btn" +
-      (
-        station.id === activeStation
-          ? " active"
-          : ""
       );
 
-    button.textContent = station.name;
 
-    button.onclick = () => selectStation(station.id);
+  if (
+    points.length > 1
+  ) {
 
-    holder.appendChild(button);
-  });
+
+    map.fitBounds(
+
+      points,
+
+      {
+
+        padding:
+          [35,35]
+
+      }
+
+    );
+
+  }
+
 }
+
+
+
+function renderTabs() {
+
+
+  const holder =
+    document.getElementById(
+      "stationTabs"
+    );
+
+
+  holder.innerHTML =
+    "";
+
+
+  Object
+    .values(
+      DATA.stations
+    )
+    .forEach(
+
+      station => {
+
+
+        const button =
+          document.createElement(
+            "button"
+          );
+
+
+        button.className =
+
+          "station-btn"
+
+          +
+
+          (
+
+            station.id
+            ===
+            activeStation
+
+              ?
+
+              " active"
+
+              :
+
+              ""
+
+          );
+
+
+        button.textContent =
+          station.name;
+
+
+        button.onclick =
+          () =>
+            selectStation(
+              station.id
+            );
+
+
+        holder.appendChild(
+          button
+        );
+
+      }
+
+    );
+
+}
+
+
 
 function setExtrema(
   metric,
@@ -662,29 +2046,80 @@ function setExtrema(
   unit,
   digits
 ) {
+
+
   const stats =
-    DATA.stations[activeStation].stats[metric];
+    DATA
+      .stations[
+        activeStation
+      ]
+      .stats[
+        metric
+      ];
 
-  document.getElementById(
-    prefix + "WeekMin"
-  ).textContent =
-    `Min ${withUnit(stats.week.min, unit, digits)}`;
 
-  document.getElementById(
-    prefix + "WeekMax"
-  ).textContent =
-    `Max ${withUnit(stats.week.max, unit, digits)}`;
+  document
+    .getElementById(
+      prefix + "WeekMin"
+    )
+    .textContent =
 
-  document.getElementById(
-    prefix + "MonthMin"
-  ).textContent =
-    `Min ${withUnit(stats.month.min, unit, digits)}`;
+      `Min ${
+        withUnit(
+          stats.week.min,
+          unit,
+          digits
+        )
+      }`;
 
-  document.getElementById(
-    prefix + "MonthMax"
-  ).textContent =
-    `Max ${withUnit(stats.month.max, unit, digits)}`;
+
+  document
+    .getElementById(
+      prefix + "WeekMax"
+    )
+    .textContent =
+
+      `Max ${
+        withUnit(
+          stats.week.max,
+          unit,
+          digits
+        )
+      }`;
+
+
+  document
+    .getElementById(
+      prefix + "MonthMin"
+    )
+    .textContent =
+
+      `Min ${
+        withUnit(
+          stats.month.min,
+          unit,
+          digits
+        )
+      }`;
+
+
+  document
+    .getElementById(
+      prefix + "MonthMax"
+    )
+    .textContent =
+
+      `Max ${
+        withUnit(
+          stats.month.max,
+          unit,
+          digits
+        )
+      }`;
+
 }
+
+
 
 function plot(
   div,
@@ -693,271 +2128,720 @@ function plot(
   unit,
   yTitle
 ) {
-  const station = DATA.stations[activeStation];
+
+
+  const station =
+    DATA.stations[
+      activeStation
+    ];
+
 
   Plotly.react(
+
     div,
+
     [
+
       {
-        x: station.history.map(row => row.time),
-        y: station.history.map(row => row[variable]),
-        type: "scatter",
-        mode: "lines",
-        name: title,
+
+        x:
+          station.history.map(
+            row =>
+              row.time
+          ),
+
+        y:
+          station.history.map(
+            row =>
+              row[
+                variable
+              ]
+          ),
+
+        type:
+          "scatter",
+
+        mode:
+          "lines",
+
+        name:
+          title,
 
         hovertemplate:
-          "%{x|%d %b %Y %H:%M} UTC<br>" +
+
+          "%{x|%d %b %Y %H:%M} UTC<br>"
+
+          +
+
           `%{y:.1f} ${unit}<extra></extra>`
+
       }
+
     ],
+
     {
+
       title: {
-        text: `${title} · last 30 days`,
-        x: .02
+
+        text:
+          `${title} · last 30 days`,
+
+        x:
+          .02
+
       },
+
 
       margin: {
-        l: 62,
-        r: 25,
-        t: 58,
-        b: 45
+
+        l:
+          62,
+
+        r:
+          25,
+
+        t:
+          58,
+
+        b:
+          45
+
       },
+
 
       xaxis: {
-        title: "Time (UTC)"
+
+        title:
+          "Time (UTC)"
+
       },
+
 
       yaxis: {
-        title: yTitle
+
+        title:
+          yTitle
+
       },
 
-      paper_bgcolor: "rgba(0,0,0,0)",
-      plot_bgcolor: "rgba(0,0,0,0)",
+
+      paper_bgcolor:
+        "rgba(0,0,0,0)",
+
+
+      plot_bgcolor:
+        "rgba(0,0,0,0)",
+
 
       font: {
-        family: "Inter, system-ui, sans-serif"
+
+        family:
+          "Inter, system-ui, sans-serif"
+
       },
 
-      showlegend: false
+
+      showlegend:
+        false
+
     },
+
     {
-      responsive: true,
-      displaylogo: false
+
+      responsive:
+        true,
+
+      displaylogo:
+        false
+
     }
+
   );
+
 }
 
-function selectStation(id) {
-  if (!DATA.stations[id]) {
+
+
+function selectStation(
+  id
+) {
+
+
+  if (
+    !DATA.stations[
+      id
+    ]
+  ) {
+
     return;
+
   }
 
-  activeStation = id;
 
-  const station = DATA.stations[id];
+  activeStation =
+    id;
+
+
+  const station =
+    DATA.stations[
+      id
+    ];
+
 
   renderTabs();
 
-  document.getElementById("pageTitle").textContent =
-    `${station.name} weather`;
 
-  document.getElementById("pageSubtitle").textContent =
-    `${station.description} · hourly observations from GEUS / PROMICE`;
+
+  document
+    .getElementById(
+      "pageTitle"
+    )
+    .textContent =
+
+      `${station.name} weather`;
+
+
+
+  document
+    .getElementById(
+      "pageSubtitle"
+    )
+    .textContent =
+
+      `${station.description} · hourly observations from GEUS / PROMICE`;
+
+
+
+  const tempObs =
+    getLatestDisplayValue(
+      station,
+      "temperature"
+    );
+
+
+  const windObs =
+    getLatestDisplayValue(
+      station,
+      "wind_speed"
+    );
+
+
+  const pressureObs =
+    getLatestDisplayValue(
+      station,
+      "pressure"
+    );
+
+
+
+  const measurementTime =
+    newestMeasurementTime(
+      station
+    );
+
 
   const ageHours =
-    observationAgeHours(station.latest.time);
+    observationAgeHours(
+      measurementTime
+    );
+
 
   const latestIsFresh =
-    ageHours <= FRESH_HOURS;
+    ageHours
+    <=
+    FRESH_HOURS;
 
-  const temperature =
-    station.latest.temperature;
 
-  const wind =
-    station.latest.wind_speed;
 
-  const pressure =
-    station.latest.pressure;
+  document
+    .getElementById(
+      "latestBoxTime"
+    )
+    .textContent =
 
-  document.getElementById("temperature").textContent =
-    latestIsFresh
-      ? fmt(temperature)
-      : "—";
+      measurementTime
 
-  document.getElementById("wind").textContent =
-    latestIsFresh
-      ? fmt(wind)
-      : "—";
+        ?
 
-  document.getElementById("pressure").textContent =
-    latestIsFresh
-      ? fmt(pressure, 0)
-      : "—";
+        formatUTC(
+          measurementTime
+        )
+
+        :
+
+        "Unknown";
+
+
+
+  document
+    .getElementById(
+      "temperature"
+    )
+    .textContent =
+
+      latestIsFresh
+      &&
+      tempObs
+
+        ?
+
+        fmt(
+          tempObs.value
+        )
+
+        :
+
+        "—";
+
+
+
+  document
+    .getElementById(
+      "wind"
+    )
+    .textContent =
+
+      latestIsFresh
+      &&
+      windObs
+
+        ?
+
+        fmt(
+          windObs.value
+        )
+
+        :
+
+        "—";
+
+
+
+  document
+    .getElementById(
+      "pressure"
+    )
+    .textContent =
+
+      latestIsFresh
+      &&
+      pressureObs
+
+        ?
+
+        fmt(
+          pressureObs.value,
+          0
+        )
+
+        :
+
+        "—";
+
+
 
   const staleNote =
-    document.getElementById("staleNote");
+    document.getElementById(
+      "staleNote"
+    );
 
-  if (latestIsFresh) {
-    staleNote.style.display = "none";
-    staleNote.textContent = "";
-  } else {
-    staleNote.style.display = "block";
 
-    staleNote.textContent =
-      `Latest observation: ${formatUTC(station.latest.time)}. ` +
-      `This observation is ${ageHours.toFixed(1)} hours old. ` +
-      `Current values are hidden because the latest measurement ` +
-      `is more than ${FRESH_HOURS} hours old.`;
-  }
-
-  setExtrema(
-    "temperature",
-    "temp",
-    "°C",
-    1
-  );
-
-  setExtrema(
-    "wind_speed",
-    "wind",
-    "m/s",
-    1
-  );
-
-  setExtrema(
-    "pressure",
-    "pressure",
-    "hPa",
-    0
-  );
-
-  document.getElementById("stationName").textContent =
-    station.name;
-
-  document.getElementById("stationDescription").textContent =
-    station.description;
-
-  document.getElementById("stationPosition").textContent =
-    `${station.latitude.toFixed(4)}° N, ` +
-    `${Math.abs(station.longitude).toFixed(4)}° W · ` +
-    `${station.elevation_m} m a.s.l.`;
-
-  document.getElementById("latestTime").textContent =
-    formatUTC(station.latest.time);
-
-  document.getElementById("sourceBadge").textContent =
-    station.source;
-
-  statusFromTime(
-    station.latest.time
-  );
 
   if (
-    map &&
-    markers[id]
+    latestIsFresh
   ) {
-    map.flyTo(
-      [
-        station.latitude,
-        station.longitude
-      ],
-      12,
-      {
-        duration: .6
-      }
-    );
 
-    markers[id].openTooltip();
+
+    staleNote.style.display =
+      "none";
+
+
+    staleNote.textContent =
+      "";
+
+
+  } else {
+
+
+    staleNote.style.display =
+      "block";
+
+
+    staleNote.textContent =
+
+      measurementTime
+
+        ?
+
+        `Latest valid observation: ${formatUTC(measurementTime)}. `
+        +
+        `This is ${ageHours.toFixed(1)} hours old, `
+        +
+        `so current values are hidden.`
+
+        :
+
+        "No recent valid observation is available.";
+
   }
 
-  plot(
-    "tempChart",
-    "Air temperature",
+
+
+  setExtrema(
+
     "temperature",
+
+    "temp",
+
     "°C",
-    "°C"
+
+    1
+
   );
 
-  plot(
-    "windChart",
-    "Wind speed",
+
+
+  setExtrema(
+
     "wind_speed",
+
+    "wind",
+
     "m/s",
-    "m/s"
+
+    1
+
   );
 
-  plot(
-    "pressureChart",
-    "Air pressure",
+
+
+  setExtrema(
+
     "pressure",
-    "hPa",
-    "hPa"
-  );
-}
 
-async function loadWeather() {
-  const response =
-    await fetch(
-      "weather.json?t=" + Date.now(),
+    "pressure",
+
+    "hPa",
+
+    0
+
+  );
+
+
+
+  document
+    .getElementById(
+      "stationName"
+    )
+    .textContent =
+
+      station.name;
+
+
+
+  document
+    .getElementById(
+      "stationDescription"
+    )
+    .textContent =
+
+      station.description;
+
+
+
+  document
+    .getElementById(
+      "stationPosition"
+    )
+    .textContent =
+
+      `${station.latitude.toFixed(4)}° N, `
+
+      +
+
+      `${Math.abs(station.longitude).toFixed(4)}° W · `
+
+      +
+
+      `${station.elevation_m} m a.s.l.`;
+
+
+
+  document
+    .getElementById(
+      "latestTime"
+    )
+    .textContent =
+
+      measurementTime
+
+        ?
+
+        formatUTC(
+          measurementTime
+        )
+
+        :
+
+        "Unknown";
+
+
+
+  document
+    .getElementById(
+      "sourceBadge"
+    )
+    .textContent =
+
+      station.source;
+
+
+
+  statusFromTime(
+    measurementTime
+  );
+
+
+
+  if (
+
+    map
+
+    &&
+
+    markers[
+      id
+    ]
+
+  ) {
+
+
+    map.flyTo(
+
+      [
+
+        station.latitude,
+
+        station.longitude
+
+      ],
+
+      12,
+
       {
-        cache: "no-store"
+
+        duration:
+          .6
+
       }
+
     );
 
-  if (!response.ok) {
+
+    markers[
+      id
+    ]
+    .openTooltip();
+
+  }
+
+
+
+  plot(
+
+    "tempChart",
+
+    "Air temperature",
+
+    "temperature",
+
+    "°C",
+
+    "°C"
+
+  );
+
+
+
+  plot(
+
+    "windChart",
+
+    "Wind speed",
+
+    "wind_speed",
+
+    "m/s",
+
+    "m/s"
+
+  );
+
+
+
+  plot(
+
+    "pressureChart",
+
+    "Air pressure",
+
+    "pressure",
+
+    "hPa",
+
+    "hPa"
+
+  );
+
+}
+
+
+
+async function loadWeather() {
+
+
+  const response =
+    await fetch(
+
+      "weather.json?t="
+      +
+      Date.now(),
+
+      {
+
+        cache:
+          "no-store"
+
+      }
+
+    );
+
+
+  if (
+    !response.ok
+  ) {
+
+
     throw new Error(
       "Could not load weather.json"
     );
+
   }
+
 
   DATA =
     await response.json();
 
-  document.getElementById("generatedTime").textContent =
-    formatUTC(
-      DATA.generated_at
-    );
+
+
+  document
+    .getElementById(
+      "generatedTime"
+    )
+    .textContent =
+
+      formatUTC(
+        DATA.generated_at
+      );
+
+
 
   if (
-    !DATA.stations[activeStation]
+
+    !DATA.stations[
+      activeStation
+    ]
+
   ) {
+
+
     activeStation =
-      Object.keys(DATA.stations)[0];
+      Object.keys(
+        DATA.stations
+      )[0];
+
   }
+
+
 
   renderTabs();
 
-  if (!map) {
+
+
+  if (
+    !map
+  ) {
+
+
     initMap();
+
   }
+
+
 
   selectStation(
     activeStation
   );
+
 }
 
-loadWeather().catch(
-  error => {
-    console.error(error);
 
-    document.getElementById("statusText").textContent =
-      "DATA ERROR";
 
-    document.getElementById("statusDot").className =
-      "dot warn";
-  }
-);
+loadWeather()
+  .catch(
+
+    error => {
+
+
+      console.error(
+        error
+      );
+
+
+      document
+        .getElementById(
+          "statusText"
+        )
+        .textContent =
+
+          "DATA ERROR";
+
+
+      document
+        .getElementById(
+          "statusDot"
+        )
+        .className =
+
+          "dot warn";
+
+    }
+
+  );
+
+
 
 setInterval(
-  () =>
-    loadWeather().catch(
-      console.error
-    ),
 
-  5 * 60 * 1000
+  () =>
+
+    loadWeather()
+      .catch(
+        console.error
+      ),
+
+  5
+  *
+  60
+  *
+  1000
+
 );
+
 
 </script>
 
+
 </body>
+
 </html>
