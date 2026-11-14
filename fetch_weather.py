@@ -50,7 +50,7 @@ THREDDS_BASES = [
 
 
 # ============================================================
-# THE NINE VARIABLES USED BY THE DASHBOARD
+# TEN VARIABLES USED BY THE DASHBOARD
 # ============================================================
 
 VARIABLES = {
@@ -164,6 +164,16 @@ VARIABLES = {
         ],
     },
 
+    "albedo": {
+        "label": "Albedo",
+        "unit": "",
+        "digits": 2,
+        "candidates": [
+            "albedo",
+            "alb",
+        ],
+    },
+
 }
 
 
@@ -199,11 +209,6 @@ def download_station(station_id):
                 raise RuntimeError(
                     "Downloaded file was unexpectedly small."
                 )
-
-            print(
-                f"Downloaded "
-                f"{len(response.content) / 1024 / 1024:.1f} MB"
-            )
 
             df = pd.read_csv(
                 io.BytesIO(response.content),
@@ -340,11 +345,6 @@ def get_numeric_series(
 
         if series.notna().any():
 
-            print(
-                f"Using {column} for "
-                f"{candidate}"
-            )
-
             return series, str(column)
 
 
@@ -380,50 +380,6 @@ def last_valid(
     )
 
 
-def min_max_stats(
-    series,
-    times,
-    newest_time,
-):
-
-    output = {}
-
-    for name, days in [
-        ("week", 7),
-        ("month", 30),
-    ]:
-
-        start = (
-            newest_time
-            -
-            pd.Timedelta(days=days)
-        )
-
-        subset = series[
-            times >= start
-        ].dropna()
-
-        if subset.empty:
-
-            output[name] = {
-                "min": None,
-                "max": None,
-            }
-
-        else:
-
-            output[name] = {
-                "min": clean_number(
-                    subset.min()
-                ),
-                "max": clean_number(
-                    subset.max()
-                ),
-            }
-
-    return output
-
-
 # ============================================================
 # PROCESS STATION
 # ============================================================
@@ -437,14 +393,11 @@ def process_station(
         station_id
     )
 
-
     time_column = find_time_column(
         raw
     )
 
-
     df = raw.copy()
-
 
     df["_time"] = pd.to_datetime(
         df[time_column],
@@ -452,22 +405,18 @@ def process_station(
         utc=True,
     )
 
-
     df = df[
         df["_time"].notna()
     ].copy()
-
 
     df = df.sort_values(
         "_time"
     )
 
-
     df = df.drop_duplicates(
         subset="_time",
         keep="last",
     )
-
 
     if df.empty:
 
@@ -475,14 +424,13 @@ def process_station(
             f"{station_id}: no valid rows."
         )
 
-
     times = df["_time"]
 
     newest_time = times.max()
 
 
     # ========================================================
-    # FIND SERIES FOR ALL NINE DASHBOARD VARIABLES
+    # SERIES
     # ========================================================
 
     series_map = {}
@@ -502,13 +450,12 @@ def process_station(
         source_columns[key] = source_column
 
 
-    # Pressure sometimes comes in Pa instead of hPa
+    # Pressure: convert Pa to hPa if needed
 
-    pressure = series_map[
-        "pressure"
-    ]
-
-    pressure_values = pressure.dropna()
+    pressure_values = (
+        series_map["pressure"]
+        .dropna()
+    )
 
     if (
         not pressure_values.empty
@@ -516,13 +463,59 @@ def process_station(
         pressure_values.median() > 2000
     ):
 
-        series_map[
-            "pressure"
-        ] = pressure / 100.0
+        series_map["pressure"] = (
+            series_map["pressure"] / 100.0
+        )
 
 
     # ========================================================
-    # LATEST OBSERVATION FOR EACH VARIABLE
+    # ALBEDO FALLBACK
+    # ========================================================
+    # If no explicit albedo column exists,
+    # calculate it as upward / downward shortwave radiation.
+
+    if not series_map["albedo"].notna().any():
+
+        downward = series_map[
+            "downward_radiation"
+        ]
+
+        upward = series_map[
+            "upward_radiation"
+        ]
+
+        with np.errstate(
+            divide="ignore",
+            invalid="ignore",
+        ):
+
+            calculated_albedo = (
+                upward / downward
+            )
+
+        calculated_albedo[
+            downward <= 5
+        ] = np.nan
+
+        calculated_albedo[
+            calculated_albedo < 0
+        ] = np.nan
+
+        calculated_albedo[
+            calculated_albedo > 1.2
+        ] = np.nan
+
+        series_map["albedo"] = (
+            calculated_albedo
+        )
+
+        source_columns["albedo"] = (
+            "calculated from usr / dsr"
+        )
+
+
+    # ========================================================
+    # LATEST MEASUREMENTS
     # ========================================================
 
     latest_measurements = {}
@@ -558,10 +551,6 @@ def process_station(
         }
 
 
-    # ========================================================
-    # NEWEST MEASUREMENT TIME
-    # ========================================================
-
     valid_times = [
 
         item["time"]
@@ -588,7 +577,7 @@ def process_station(
 
 
     # ========================================================
-    # 30 DAY HISTORY FOR ALL NINE VARIABLES
+    # 30 DAY HISTORY
     # ========================================================
 
     month_start = (
@@ -624,22 +613,6 @@ def process_station(
 
         history.append(
             row
-        )
-
-
-    # ========================================================
-    # STATS
-    # ========================================================
-
-    stats = {}
-
-
-    for key in VARIABLES:
-
-        stats[key] = min_max_stats(
-            series_map[key],
-            times,
-            newest_time,
         )
 
 
@@ -681,9 +654,6 @@ def process_station(
         "latest_measurements":
             latest_measurements,
 
-        "stats":
-            stats,
-
         "history":
             history,
 
@@ -722,15 +692,12 @@ def main():
 
         try:
 
-            station_result = process_station(
+            result["stations"][
+                station_id
+            ] = process_station(
                 station_id,
                 metadata,
             )
-
-            result[
-                "stations"
-            ][station_id] = station_result
-
 
             print(
                 f"{station_id}: SUCCESS"
@@ -743,9 +710,7 @@ def main():
                 f"{station_id}: FAILED: {exc}"
             )
 
-            result[
-                "failures"
-            ].append({
+            result["failures"].append({
 
                 "station":
                     station_id,
@@ -778,7 +743,6 @@ def main():
         )
 
 
-    print()
     print(
         "weather.json successfully written"
     )
