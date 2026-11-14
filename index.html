@@ -27,7 +27,7 @@
       --accent-soft: #dceef4;
       --good: #16875f;
       --warn: #d39119;
-      --shadow: 0 12px 35px rgba(28, 55, 75, .08);
+      --shadow: 0 12px 35px rgba(28,55,75,.08);
     }
 
     * {
@@ -44,15 +44,9 @@
         BlinkMacSystemFont,
         "Segoe UI",
         sans-serif;
-
       background:
-        radial-gradient(
-          circle at top right,
-          #d7eaf2 0,
-          transparent 32rem
-        ),
+        radial-gradient(circle at top right, #d7eaf2 0, transparent 32rem),
         var(--bg);
-
       color: var(--text);
     }
 
@@ -137,11 +131,6 @@
       font: inherit;
       font-weight: 750;
       cursor: pointer;
-      transition: .18s ease;
-    }
-
-    .station-btn:hover {
-      transform: translateY(-1px);
     }
 
     .station-btn.active {
@@ -152,9 +141,7 @@
 
     .layout {
       display: grid;
-      grid-template-columns:
-        minmax(0, 1.65fr)
-        minmax(300px, .85fr);
+      grid-template-columns: minmax(0, 1.65fr) minmax(300px, .85fr);
       gap: 17px;
     }
 
@@ -347,388 +334,172 @@
 </head>
 
 <body>
-
 <div class="page">
 
   <header>
-
     <div>
-      <div class="eyebrow">
-        Southeast Greenland AWS network
-      </div>
-
-      <h1 id="pageTitle">
-        Weather dashboard
-      </h1>
-
-      <div
-        class="subtitle"
-        id="pageSubtitle"
-      >
+      <div class="eyebrow">Southeast Greenland AWS network</div>
+      <h1 id="pageTitle">Weather dashboard</h1>
+      <div class="subtitle" id="pageSubtitle">
         Hourly observations from GEUS / PROMICE.
       </div>
     </div>
 
     <div class="status-pill">
-
-      <span
-        id="statusDot"
-        class="dot"
-      ></span>
-
-      <span id="statusText">
-        Loading data…
-      </span>
-
+      <span id="statusDot" class="dot"></span>
+      <span id="statusText">Loading data…</span>
     </div>
-
   </header>
 
-
-  <div
-    class="station-tabs"
-    id="stationTabs"
-  ></div>
-
+  <div class="station-tabs" id="stationTabs"></div>
 
   <div class="layout">
 
     <div class="panel panel-pad">
-
-      <div class="section-title">
-        Latest observation
-      </div>
-
+      <div class="section-title">Latest observation</div>
 
       <div class="current-grid">
 
         <div class="metric">
-
-          <div class="metric-label">
-            Air temperature
-          </div>
-
+          <div class="metric-label">Air temperature</div>
           <div class="metric-value">
             <span id="temperature">—</span>
             <span class="unit">°C</span>
           </div>
-
         </div>
 
-
         <div class="metric">
-
-          <div class="metric-label">
-            Wind speed
-          </div>
-
+          <div class="metric-label">Wind speed</div>
           <div class="metric-value">
             <span id="wind">—</span>
             <span class="unit">m/s</span>
           </div>
-
         </div>
 
-
         <div class="metric">
-
-          <div class="metric-label">
-            Air pressure
-          </div>
-
+          <div class="metric-label">Air pressure</div>
           <div class="metric-value">
             <span id="pressure">—</span>
             <span class="unit">hPa</span>
           </div>
-
         </div>
 
       </div>
 
+      <div class="stale-note" id="staleNote"></div>
 
-      <div
-        class="stale-note"
-        id="staleNote"
-      >
-        Latest observation is more than
-        3 hours old. Current values are
-        therefore hidden.
-      </div>
-
-
-      <div
-        class="section-title"
-        style="margin-top:25px"
-      >
+      <div class="section-title" style="margin-top:25px">
         Weekly & monthly range
       </div>
-
 
       <div class="extrema-grid">
 
         <div class="extrema-card">
+          <div class="extrema-name">Temperature</div>
 
-          <div class="extrema-name">
-            Temperature
+          <div class="period">
+            <span class="period-name">7 days</span>
+            <span class="lo" id="tempWeekMin">—</span>
+            <span class="hi" id="tempWeekMax">—</span>
           </div>
 
           <div class="period">
-            <span class="period-name">
-              7 days
-            </span>
-
-            <span
-              class="lo"
-              id="tempWeekMin"
-            >
-              —
-            </span>
-
-            <span
-              class="hi"
-              id="tempWeekMax"
-            >
-              —
-            </span>
+            <span class="period-name">30 days</span>
+            <span class="lo" id="tempMonthMin">—</span>
+            <span class="hi" id="tempMonthMax">—</span>
           </div>
-
-          <div class="period">
-            <span class="period-name">
-              30 days
-            </span>
-
-            <span
-              class="lo"
-              id="tempMonthMin"
-            >
-              —
-            </span>
-
-            <span
-              class="hi"
-              id="tempMonthMax"
-            >
-              —
-            </span>
-          </div>
-
         </div>
 
-
         <div class="extrema-card">
+          <div class="extrema-name">Wind speed</div>
 
-          <div class="extrema-name">
-            Wind speed
+          <div class="period">
+            <span class="period-name">7 days</span>
+            <span class="lo" id="windWeekMin">—</span>
+            <span class="hi" id="windWeekMax">—</span>
           </div>
 
           <div class="period">
-            <span class="period-name">
-              7 days
-            </span>
-
-            <span
-              class="lo"
-              id="windWeekMin"
-            >
-              —
-            </span>
-
-            <span
-              class="hi"
-              id="windWeekMax"
-            >
-              —
-            </span>
+            <span class="period-name">30 days</span>
+            <span class="lo" id="windMonthMin">—</span>
+            <span class="hi" id="windMonthMax">—</span>
           </div>
-
-          <div class="period">
-            <span class="period-name">
-              30 days
-            </span>
-
-            <span
-              class="lo"
-              id="windMonthMin"
-            >
-              —
-            </span>
-
-            <span
-              class="hi"
-              id="windMonthMax"
-            >
-              —
-            </span>
-          </div>
-
         </div>
 
-
         <div class="extrema-card">
+          <div class="extrema-name">Air pressure</div>
 
-          <div class="extrema-name">
-            Air pressure
+          <div class="period">
+            <span class="period-name">7 days</span>
+            <span class="lo" id="pressureWeekMin">—</span>
+            <span class="hi" id="pressureWeekMax">—</span>
           </div>
 
           <div class="period">
-            <span class="period-name">
-              7 days
-            </span>
-
-            <span
-              class="lo"
-              id="pressureWeekMin"
-            >
-              —
-            </span>
-
-            <span
-              class="hi"
-              id="pressureWeekMax"
-            >
-              —
-            </span>
+            <span class="period-name">30 days</span>
+            <span class="lo" id="pressureMonthMin">—</span>
+            <span class="hi" id="pressureMonthMax">—</span>
           </div>
-
-          <div class="period">
-            <span class="period-name">
-              30 days
-            </span>
-
-            <span
-              class="lo"
-              id="pressureMonthMin"
-            >
-              —
-            </span>
-
-            <span
-              class="hi"
-              id="pressureMonthMax"
-            >
-              —
-            </span>
-          </div>
-
         </div>
 
       </div>
-
     </div>
 
-
     <div class="panel map-panel">
-
       <div id="map"></div>
 
       <div class="station-info">
-
-        <strong id="stationName">
-          —
-        </strong>
+        <strong id="stationName">—</strong>
 
         <div class="station-meta">
-
-          <span id="stationDescription">
-            —
-          </span>
-
-          <br>
-
-          <span id="stationPosition">
-            —
-          </span>
-
-          <br>
+          <span id="stationDescription">—</span><br>
+          <span id="stationPosition">—</span><br>
 
           Latest available observation:
-          <span id="latestTime">
-            —
-          </span>
+          <span id="latestTime">—</span><br>
 
-          <br>
-
-          <span
-            id="sourceBadge"
-            class="source-badge"
-          >
-            —
-          </span>
-
+          <span id="sourceBadge" class="source-badge">—</span>
         </div>
-
       </div>
-
     </div>
 
   </div>
-
 
   <div class="charts">
 
     <div class="panel">
-      <div
-        id="tempChart"
-        class="chart"
-      ></div>
+      <div id="tempChart" class="chart"></div>
     </div>
 
-
     <div class="panel">
-      <div
-        id="windChart"
-        class="chart"
-      ></div>
+      <div id="windChart" class="chart"></div>
     </div>
 
-
     <div class="panel">
-      <div
-        id="pressureChart"
-        class="chart"
-      ></div>
+      <div id="pressureChart" class="chart"></div>
     </div>
 
   </div>
 
-
   <div class="footer-meta">
-
-    Dashboard generated from GEUS / PROMICE
-    hourly AWS products.
-
-    <br>
-
-    Times are shown in UTC.
-
-    <br>
-
+    Dashboard generated from GEUS / PROMICE hourly AWS products.<br>
+    All times shown are UTC.<br>
     Dashboard data generated:
-    <span id="generatedTime">
-      —
-    </span>
-
+    <span id="generatedTime">—</span>
   </div>
 
 </div>
 
-
 <script>
 
+const FRESH_HOURS = 5;
+
 let DATA = null;
-
 let activeStation = "SER_B";
-
 let map = null;
-
 let markers = {};
 
-
-const fmt = (
-  value,
-  digits = 1
-) => {
-
+const fmt = (value, digits = 1) => {
   if (
     value === null ||
     value === undefined ||
@@ -740,16 +511,11 @@ const fmt = (
   return Number(value).toFixed(digits);
 };
 
-
-const withUnit = (
-  value,
-  unit,
-  digits = 1
-) => {
-
+const withUnit = (value, unit, digits = 1) => {
   if (
     value === null ||
-    value === undefined
+    value === undefined ||
+    Number.isNaN(Number(value))
   ) {
     return "—";
   }
@@ -757,236 +523,138 @@ const withUnit = (
   return `${fmt(value, digits)} ${unit}`;
 };
 
-
 function observationAgeHours(timestamp) {
+  const time = new Date(timestamp).getTime();
 
-  return (
-    Date.now()
-    -
-    new Date(timestamp).getTime()
-  )
-  /
-  3600000;
-
-}
-
-
-function formatUTC(timestamp) {
-
-  const date =
-    new Date(timestamp);
-
-  return date.toLocaleString(
-    "en-GB",
-    {
-      timeZone: "UTC",
-      year: "numeric",
-      month: "short",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false
-    }
-  )
-  + " UTC";
-
-}
-
-
-function statusFromTime(timestamp) {
-
-  const ageHours =
-    observationAgeHours(timestamp);
-
-  const dot =
-    document.getElementById(
-      "statusDot"
-    );
-
-  const text =
-    document.getElementById(
-      "statusText"
-    );
-
-  dot.className =
-    "dot";
-
-  if (ageHours <= 3) {
-
-    dot.classList.add(
-      "good"
-    );
-
-    text.textContent =
-      "LIVE";
-
-  } else {
-
-    dot.classList.add(
-      "warn"
-    );
-
-    text.textContent =
-      "DELAYED";
-
+  if (!Number.isFinite(time)) {
+    return Infinity;
   }
 
+  return (Date.now() - time) / 3600000;
 }
 
+function formatUTC(timestamp) {
+  const date = new Date(timestamp);
+
+  if (Number.isNaN(date.getTime())) {
+    return "Unknown";
+  }
+
+  return (
+    date.toLocaleString(
+      "en-GB",
+      {
+        timeZone: "UTC",
+        year: "numeric",
+        month: "short",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false
+      }
+    ) + " UTC"
+  );
+}
+
+function statusFromTime(timestamp) {
+  const ageHours = observationAgeHours(timestamp);
+
+  const dot = document.getElementById("statusDot");
+  const text = document.getElementById("statusText");
+
+  dot.className = "dot";
+
+  if (ageHours <= FRESH_HOURS) {
+    dot.classList.add("good");
+    text.textContent = "LIVE";
+  } else {
+    dot.classList.add("warn");
+    text.textContent = "DELAYED";
+  }
+}
 
 function initMap() {
-
-  map =
-    L.map(
-      "map",
-      {
-        zoomControl: true,
-        scrollWheelZoom: false
-      }
-    )
-    .setView(
-      [65.69, -37.86],
-      11
-    );
-
+  map = L.map(
+    "map",
+    {
+      zoomControl: true,
+      scrollWheelZoom: false
+    }
+  ).setView([65.69, -37.86], 11);
 
   L.tileLayer(
     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     {
       maxZoom: 18,
-      attribution:
-        "&copy; OpenStreetMap contributors"
+      attribution: "&copy; OpenStreetMap contributors"
     }
-  )
-  .addTo(map);
+  ).addTo(map);
 
+  Object.values(DATA.stations).forEach(station => {
+    const marker = L.circleMarker(
+      [station.latitude, station.longitude],
+      {
+        radius: 8,
+        weight: 2,
+        fillOpacity: .9
+      }
+    ).addTo(map);
 
-  Object
-    .values(DATA.stations)
-    .forEach(
-      station => {
-
-        const marker =
-          L.circleMarker(
-            [
-              station.latitude,
-              station.longitude
-            ],
-            {
-              radius: 8,
-              weight: 2,
-              fillOpacity: .9
-            }
-          )
-          .addTo(map);
-
-
-        marker.bindTooltip(
-          station.name,
-          {
-            direction: "top"
-          }
-        );
-
-
-        marker.on(
-          "click",
-          () =>
-            selectStation(
-              station.id
-            )
-        );
-
-
-        markers[
-          station.id
-        ] = marker;
-
+    marker.bindTooltip(
+      station.name,
+      {
+        direction: "top"
       }
     );
 
+    marker.on(
+      "click",
+      () => selectStation(station.id)
+    );
 
-  const points =
-    Object
-      .values(DATA.stations)
-      .map(
-        station => [
-          station.latitude,
-          station.longitude
-        ]
-      );
+    markers[station.id] = marker;
+  });
 
+  const points = Object.values(DATA.stations).map(
+    station => [
+      station.latitude,
+      station.longitude
+    ]
+  );
 
   if (points.length > 1) {
-
     map.fitBounds(
       points,
       {
         padding: [35, 35]
       }
     );
-
   }
-
 }
-
 
 function renderTabs() {
+  const holder = document.getElementById("stationTabs");
 
-  const holder =
-    document.getElementById(
-      "stationTabs"
-    );
+  holder.innerHTML = "";
 
-  holder.innerHTML =
-    "";
+  Object.values(DATA.stations).forEach(station => {
+    const button = document.createElement("button");
 
+    button.className =
+      "station-btn" +
+      (
+        station.id === activeStation
+          ? " active"
+          : ""
+      );
 
-  Object
-    .values(DATA.stations)
-    .forEach(
-      station => {
+    button.textContent = station.name;
 
-        const button =
-          document.createElement(
-            "button"
-          );
+    button.onclick = () => selectStation(station.id);
 
-
-        button.className =
-          "station-btn"
-          +
-          (
-            station.id
-            ===
-            activeStation
-              ?
-              " active"
-              :
-              ""
-          );
-
-
-        button.textContent =
-          station.name;
-
-
-        button.onclick =
-          () =>
-            selectStation(
-              station.id
-            );
-
-
-        holder.appendChild(
-          button
-        );
-
-      }
-    );
-
+    holder.appendChild(button);
+  });
 }
-
 
 function setExtrema(
   metric,
@@ -994,74 +662,29 @@ function setExtrema(
   unit,
   digits
 ) {
-
   const stats =
-    DATA
-      .stations[
-        activeStation
-      ]
-      .stats[
-        metric
-      ];
+    DATA.stations[activeStation].stats[metric];
 
+  document.getElementById(
+    prefix + "WeekMin"
+  ).textContent =
+    `Min ${withUnit(stats.week.min, unit, digits)}`;
 
-  document
-    .getElementById(
-      prefix + "WeekMin"
-    )
-    .textContent =
-      `Min ${
-        withUnit(
-          stats.week.min,
-          unit,
-          digits
-        )
-      }`;
+  document.getElementById(
+    prefix + "WeekMax"
+  ).textContent =
+    `Max ${withUnit(stats.week.max, unit, digits)}`;
 
+  document.getElementById(
+    prefix + "MonthMin"
+  ).textContent =
+    `Min ${withUnit(stats.month.min, unit, digits)}`;
 
-  document
-    .getElementById(
-      prefix + "WeekMax"
-    )
-    .textContent =
-      `Max ${
-        withUnit(
-          stats.week.max,
-          unit,
-          digits
-        )
-      }`;
-
-
-  document
-    .getElementById(
-      prefix + "MonthMin"
-    )
-    .textContent =
-      `Min ${
-        withUnit(
-          stats.month.min,
-          unit,
-          digits
-        )
-      }`;
-
-
-  document
-    .getElementById(
-      prefix + "MonthMax"
-    )
-    .textContent =
-      `Max ${
-        withUnit(
-          stats.month.max,
-          unit,
-          digits
-        )
-      }`;
-
+  document.getElementById(
+    prefix + "MonthMax"
+  ).textContent =
+    `Max ${withUnit(stats.month.max, unit, digits)}`;
 }
-
 
 function plot(
   div,
@@ -1070,48 +693,26 @@ function plot(
   unit,
   yTitle
 ) {
-
-  const station =
-    DATA.stations[
-      activeStation
-    ];
-
-
-  const x =
-    station.history.map(
-      row => row.time
-    );
-
+  const station = DATA.stations[activeStation];
 
   Plotly.react(
     div,
     [
       {
-        x: x,
-
-        y:
-          station.history.map(
-            row =>
-              row[variable]
-          ),
-
-        type:
-          "scatter",
-
-        mode:
-          "lines",
-
-        name:
-          title,
+        x: station.history.map(row => row.time),
+        y: station.history.map(row => row[variable]),
+        type: "scatter",
+        mode: "lines",
+        name: title,
 
         hovertemplate:
-          `%{x}<br>%{y:.1f} ${unit}<extra></extra>`
+          "%{x|%d %b %Y %H:%M} UTC<br>" +
+          `%{y:.1f} ${unit}<extra></extra>`
       }
     ],
     {
       title: {
-        text:
-          `${title} · last 30 days`,
+        text: `${title} · last 30 days`,
         x: .02
       },
 
@@ -1123,153 +724,91 @@ function plot(
       },
 
       xaxis: {
-        title:
-          "Time (UTC)"
+        title: "Time (UTC)"
       },
 
       yaxis: {
-        title:
-          yTitle
+        title: yTitle
       },
 
-      paper_bgcolor:
-        "rgba(0,0,0,0)",
-
-      plot_bgcolor:
-        "rgba(0,0,0,0)",
+      paper_bgcolor: "rgba(0,0,0,0)",
+      plot_bgcolor: "rgba(0,0,0,0)",
 
       font: {
-        family:
-          "Inter, system-ui, sans-serif"
+        family: "Inter, system-ui, sans-serif"
       },
 
-      showlegend:
-        false
+      showlegend: false
     },
     {
-      responsive:
-        true,
-
-      displaylogo:
-        false
+      responsive: true,
+      displaylogo: false
     }
   );
-
 }
 
-
 function selectStation(id) {
-
-  if (
-    !DATA.stations[id]
-  ) {
+  if (!DATA.stations[id]) {
     return;
   }
 
+  activeStation = id;
 
-  activeStation =
-    id;
-
-
-  const station =
-    DATA.stations[id];
-
+  const station = DATA.stations[id];
 
   renderTabs();
 
+  document.getElementById("pageTitle").textContent =
+    `${station.name} weather`;
 
-  document
-    .getElementById(
-      "pageTitle"
-    )
-    .textContent =
-      `${station.name} weather`;
-
-
-  document
-    .getElementById(
-      "pageSubtitle"
-    )
-    .textContent =
-      `${station.description} · hourly observations from GEUS / PROMICE`;
-
+  document.getElementById("pageSubtitle").textContent =
+    `${station.description} · hourly observations from GEUS / PROMICE`;
 
   const ageHours =
-    observationAgeHours(
-      station.latest.time
-    );
-
+    observationAgeHours(station.latest.time);
 
   const latestIsFresh =
-    ageHours <= 3;
+    ageHours <= FRESH_HOURS;
 
+  const temperature =
+    station.latest.temperature;
 
-  document
-    .getElementById(
-      "temperature"
-    )
-    .textContent =
-      latestIsFresh
-        ?
-        fmt(
-          station.latest.temperature
-        )
-        :
-        "—";
+  const wind =
+    station.latest.wind_speed;
 
+  const pressure =
+    station.latest.pressure;
 
-  document
-    .getElementById(
-      "wind"
-    )
-    .textContent =
-      latestIsFresh
-        ?
-        fmt(
-          station.latest.wind_speed
-        )
-        :
-        "—";
+  document.getElementById("temperature").textContent =
+    latestIsFresh
+      ? fmt(temperature)
+      : "—";
 
+  document.getElementById("wind").textContent =
+    latestIsFresh
+      ? fmt(wind)
+      : "—";
 
-  document
-    .getElementById(
-      "pressure"
-    )
-    .textContent =
-      latestIsFresh
-        ?
-        fmt(
-          station.latest.pressure,
-          0
-        )
-        :
-        "—";
-
+  document.getElementById("pressure").textContent =
+    latestIsFresh
+      ? fmt(pressure, 0)
+      : "—";
 
   const staleNote =
-    document.getElementById(
-      "staleNote"
-    );
-
+    document.getElementById("staleNote");
 
   if (latestIsFresh) {
-
-    staleNote.style.display =
-      "none";
-
+    staleNote.style.display = "none";
+    staleNote.textContent = "";
   } else {
-
-    staleNote.style.display =
-      "block";
+    staleNote.style.display = "block";
 
     staleNote.textContent =
-      `Latest observation is ${ageHours.toFixed(1)} hours old. `
-      +
-      `Current values are hidden because the latest measurement is more than 3 hours old.`;
-
+      `Latest observation: ${formatUTC(station.latest.time)}. ` +
+      `This observation is ${ageHours.toFixed(1)} hours old. ` +
+      `Current values are hidden because the latest measurement ` +
+      `is more than ${FRESH_HOURS} hours old.`;
   }
-
 
   setExtrema(
     "temperature",
@@ -1278,14 +817,12 @@ function selectStation(id) {
     1
   );
 
-
   setExtrema(
     "wind_speed",
     "wind",
     "m/s",
     1
   );
-
 
   setExtrema(
     "pressure",
@@ -1294,63 +831,31 @@ function selectStation(id) {
     0
   );
 
+  document.getElementById("stationName").textContent =
+    station.name;
 
-  document
-    .getElementById(
-      "stationName"
-    )
-    .textContent =
-      station.name;
+  document.getElementById("stationDescription").textContent =
+    station.description;
 
+  document.getElementById("stationPosition").textContent =
+    `${station.latitude.toFixed(4)}° N, ` +
+    `${Math.abs(station.longitude).toFixed(4)}° W · ` +
+    `${station.elevation_m} m a.s.l.`;
 
-  document
-    .getElementById(
-      "stationDescription"
-    )
-    .textContent =
-      station.description;
+  document.getElementById("latestTime").textContent =
+    formatUTC(station.latest.time);
 
-
-  document
-    .getElementById(
-      "stationPosition"
-    )
-    .textContent =
-      `${station.latitude.toFixed(4)}° N, `
-      +
-      `${Math.abs(station.longitude).toFixed(4)}° W · `
-      +
-      `${station.elevation_m} m a.s.l.`;
-
-
-  document
-    .getElementById(
-      "latestTime"
-    )
-    .textContent =
-      formatUTC(
-        station.latest.time
-      );
-
-
-  document
-    .getElementById(
-      "sourceBadge"
-    )
-    .textContent =
-      station.source;
-
+  document.getElementById("sourceBadge").textContent =
+    station.source;
 
   statusFromTime(
     station.latest.time
   );
 
-
   if (
     map &&
     markers[id]
   ) {
-
     map.flyTo(
       [
         station.latitude,
@@ -1362,14 +867,8 @@ function selectStation(id) {
       }
     );
 
-
-    markers[
-      id
-    ]
-    .openTooltip();
-
+    markers[id].openTooltip();
   }
-
 
   plot(
     "tempChart",
@@ -1379,7 +878,6 @@ function selectStation(id) {
     "°C"
   );
 
-
   plot(
     "windChart",
     "Wind speed",
@@ -1388,7 +886,6 @@ function selectStation(id) {
     "m/s"
   );
 
-
   plot(
     "pressureChart",
     "Air pressure",
@@ -1396,112 +893,66 @@ function selectStation(id) {
     "hPa",
     "hPa"
   );
-
 }
 
-
 async function loadWeather() {
-
   const response =
     await fetch(
-      "weather.json?t="
-      +
-      Date.now(),
+      "weather.json?t=" + Date.now(),
       {
-        cache:
-          "no-store"
+        cache: "no-store"
       }
     );
 
-
-  if (
-    !response.ok
-  ) {
-
+  if (!response.ok) {
     throw new Error(
       "Could not load weather.json"
     );
-
   }
-
 
   DATA =
     await response.json();
 
-
-  document
-    .getElementById(
-      "generatedTime"
-    )
-    .textContent =
-      formatUTC(
-        DATA.generated_at
-      );
-
+  document.getElementById("generatedTime").textContent =
+    formatUTC(
+      DATA.generated_at
+    );
 
   if (
-    !DATA.stations[
-      activeStation
-    ]
+    !DATA.stations[activeStation]
   ) {
-
     activeStation =
-      Object.keys(
-        DATA.stations
-      )[0];
-
+      Object.keys(DATA.stations)[0];
   }
-
 
   renderTabs();
 
-
   if (!map) {
-
     initMap();
-
   }
-
 
   selectStation(
     activeStation
   );
-
 }
 
+loadWeather().catch(
+  error => {
+    console.error(error);
 
-loadWeather()
-  .catch(
-    error => {
+    document.getElementById("statusText").textContent =
+      "DATA ERROR";
 
-      console.error(
-        error
-      );
-
-      document
-        .getElementById(
-          "statusText"
-        )
-        .textContent =
-          "DATA ERROR";
-
-      document
-        .getElementById(
-          "statusDot"
-        )
-        .className =
-          "dot warn";
-
-    }
-  );
-
+    document.getElementById("statusDot").className =
+      "dot warn";
+  }
+);
 
 setInterval(
   () =>
-    loadWeather()
-      .catch(
-        console.error
-      ),
+    loadWeather().catch(
+      console.error
+    ),
 
   5 * 60 * 1000
 );
