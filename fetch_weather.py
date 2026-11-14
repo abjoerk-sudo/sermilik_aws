@@ -1,10 +1,15 @@
+import io
 import json
-from pathlib import Path
 from datetime import datetime, timezone
 
+import numpy as np
 import pandas as pd
 import requests
 
+
+# ============================================================
+# STATIONS
+# ============================================================
 
 STATIONS = {
     "SER_B": {
@@ -14,6 +19,7 @@ STATIONS = {
         "longitude": -37.9174,
         "elevation_m": 28,
     },
+
     "MIT_B": {
         "name": "MIT_B",
         "description": "Mittivakkat bedrock station",
@@ -21,6 +27,7 @@ STATIONS = {
         "longitude": -37.8115,
         "elevation_m": 519,
     },
+
     "MIT": {
         "name": "MIT",
         "description": "Mittivakkat Glacier",
@@ -31,455 +38,776 @@ STATIONS = {
 }
 
 
-DATASET_API = (
-    "https://dataverse.geus.dk/api/datasets/:persistentId/"
-    "?persistentId=doi:10.22008/FK2/IW73UU"
+BASE_URL = (
+    "https://thredds.geus.dk/"
+    "thredds/fileServer/aws/l2stations/csv/hour"
 )
 
-OUTFILE = Path(__file__).with_name("weather.json")
+
+# ============================================================
+# COMMON VARIABLE NAMES
+# ============================================================
+
+TIME_CANDIDATES = [
+    "time",
+    "timestamp",
+    "datetime",
+    "date",
+]
 
 
-session = requests.Session()
-
-session.headers.update({
-    "User-Agent": "Sermilik-weather-dashboard/1.0"
-})
-
-
-def first_existing(columns, candidates):
-    for name in candidates:
-        if name in columns:
-            return name
-    return None
+TEMPERATURE_CANDIDATES = [
+    "t_u",
+    "t_i",
+    "t_l",
+    "air_temperature",
+    "temperature",
+]
 
 
-def clean_value(value):
-    if pd.isna(value):
+WIND_SPEED_CANDIDATES = [
+    "wspd_u",
+    "wspd_i",
+    "wspd_l",
+    "wind_speed",
+]
+
+
+WIND_DIRECTION_CANDIDATES = [
+    "wdir_u",
+    "wdir_i",
+    "wdir_l",
+    "wind_direction",
+]
+
+
+PRESSURE_CANDIDATES = [
+    "p_u",
+    "p_i",
+    "p_l",
+    "air_pressure",
+    "pressure",
+]
+
+
+HUMIDITY_CANDIDATES = [
+    "rh_u",
+    "rh_i",
+    "rh_l",
+    "relative_humidity",
+    "humidity",
+]
+
+
+# ============================================================
+# LABELS FOR KNOWN GEUS / PROMICE VARIABLES
+# ============================================================
+
+VARIABLE_INFO = {
+
+    "t_u": ("Air temperature – upper", "°C"),
+    "t_l": ("Air temperature – lower", "°C"),
+    "t_i": ("Air temperature", "°C"),
+    "air_temperature": ("Air temperature", "°C"),
+    "temperature": ("Air temperature", "°C"),
+
+    "rh_u": ("Relative humidity – upper", "%"),
+    "rh_l": ("Relative humidity – lower", "%"),
+    "rh_i": ("Relative humidity", "%"),
+    "relative_humidity": ("Relative humidity", "%"),
+    "humidity": ("Relative humidity", "%"),
+
+    "wspd_u": ("Wind speed – upper", "m/s"),
+    "wspd_l": ("Wind speed – lower", "m/s"),
+    "wspd_i": ("Wind speed", "m/s"),
+    "wind_speed": ("Wind speed", "m/s"),
+
+    "wdir_u": ("Wind direction – upper", "°"),
+    "wdir_l": ("Wind direction – lower", "°"),
+    "wdir_i": ("Wind direction", "°"),
+    "wind_direction": ("Wind direction", "°"),
+
+    "p_u": ("Air pressure – upper", "hPa"),
+    "p_l": ("Air pressure – lower", "hPa"),
+    "p_i": ("Air pressure", "hPa"),
+    "air_pressure": ("Air pressure", "hPa"),
+    "pressure": ("Air pressure", "hPa"),
+
+    "dsr": ("Downward shortwave radiation", "W/m²"),
+    "usr": ("Upward shortwave radiation", "W/m²"),
+    "dlr": ("Downward longwave radiation", "W/m²"),
+    "ulr": ("Upward longwave radiation", "W/m²"),
+
+    "t_surf": ("Surface temperature", "°C"),
+    "surface_temperature": ("Surface temperature", "°C"),
+
+    "precip_u": ("Precipitation – upper", "mm"),
+    "precip_l": ("Precipitation – lower", "mm"),
+    "precipitation": ("Precipitation", "mm"),
+
+    "z_boom_u": ("Boom height – upper", "m"),
+    "z_boom_l": ("Boom height – lower", "m"),
+
+    "snow_height": ("Snow height", "m"),
+    "snow_depth": ("Snow depth", "m"),
+
+    "gps_lat": ("GPS latitude", "°"),
+    "gps_lon": ("GPS longitude", "°"),
+    "gps_alt": ("GPS altitude", "m"),
+
+    "battery_voltage": ("Battery voltage", "V"),
+    "voltage": ("Battery voltage", "V"),
+}
+
+
+# ============================================================
+# HELPERS
+# ============================================================
+
+def download_csv(station_id):
+
+    url = f"{BASE_URL}/{station_id}_hour.csv"
+
+    print(f"Downloading {url}")
+
+    response = requests.get(
+        url,
+        timeout=120,
+    )
+
+    response.raise_for_status()
+
+    text = response.text
+
+    # sep=None lets pandas determine comma / semicolon automatically
+    df = pd.read_csv(
+        io.StringIO(text),
+        sep=None,
+        engine="python",
+        low_memory=False,
+    )
+
+    return df, url
+
+
+def find_time_column(df):
+
+    lower_map = {
+        str(c).lower(): c
+        for c in df.columns
+    }
+
+    for candidate in TIME_CANDIDATES:
+
+        if candidate.lower() in lower_map:
+            return lower_map[candidate.lower()]
+
+    raise ValueError(
+        "Could not find time column. "
+        f"Available columns: {list(df.columns)}"
+    )
+
+
+def prepare_dataframe(df):
+
+    time_col = find_time_column(df)
+
+    df = df.copy()
+
+    df[time_col] = pd.to_datetime(
+        df[time_col],
+        errors="coerce",
+        utc=True,
+    )
+
+    df = df[
+        df[time_col].notna()
+    ].copy()
+
+    df = df.sort_values(time_col)
+
+    df = df.drop_duplicates(
+        subset=[time_col],
+        keep="last",
+    )
+
+    df = df.rename(
+        columns={
+            time_col: "_time"
+        }
+    )
+
+    return df
+
+
+def numeric_series(df, column):
+
+    return pd.to_numeric(
+        df[column],
+        errors="coerce",
+    )
+
+
+def first_available_series(df, candidates):
+
+    lower_map = {
+        str(c).lower(): c
+        for c in df.columns
+    }
+
+    for candidate in candidates:
+
+        real_column = lower_map.get(
+            candidate.lower()
+        )
+
+        if real_column is None:
+            continue
+
+        values = numeric_series(
+            df,
+            real_column,
+        )
+
+        if values.notna().any():
+            return values
+
+    return pd.Series(
+        np.nan,
+        index=df.index,
+        dtype=float,
+    )
+
+
+def clean_number(value):
+
+    if value is None:
         return None
 
     try:
-        return float(value)
-    except Exception:
+        number = float(value)
+    except (TypeError, ValueError):
         return None
 
+    if not np.isfinite(number):
+        return None
 
-def download_from_l2_thredds(station):
+    return number
 
-    url = (
-        "https://thredds.geus.dk/thredds/fileServer/"
-        f"aws/l2stations/csv/hour/{station}_hour.csv"
+
+def iso_time(value):
+
+    if value is None:
+        return None
+
+    if pd.isna(value):
+        return None
+
+    timestamp = pd.Timestamp(value)
+
+    if timestamp.tzinfo is None:
+        timestamp = timestamp.tz_localize("UTC")
+
+    return timestamp.isoformat()
+
+
+def prettify_variable_name(name):
+
+    name = str(name)
+
+    return (
+        name
+        .replace("_", " ")
+        .strip()
+        .title()
     )
 
-    print("")
-    print(f"[{station}] Trying L2 THREDDS...")
-    print(url)
 
-    response = session.get(
-        url,
-        timeout=(20, 120),
-        allow_redirects=True
+def infer_unit(name):
+
+    lower = str(name).lower()
+
+    if lower.startswith("t_") or "temperature" in lower:
+        return "°C"
+
+    if lower.startswith("rh") or "humidity" in lower:
+        return "%"
+
+    if "wspd" in lower or "wind_speed" in lower:
+        return "m/s"
+
+    if "wdir" in lower or "wind_direction" in lower:
+        return "°"
+
+    if (
+        lower.startswith("p_")
+        or lower == "pressure"
+        or "air_pressure" in lower
+    ):
+        return "hPa"
+
+    if lower in ["dsr", "usr", "dlr", "ulr"]:
+        return "W/m²"
+
+    if "radiation" in lower:
+        return "W/m²"
+
+    if "precip" in lower:
+        return "mm"
+
+    if "snow" in lower and (
+        "height" in lower
+        or "depth" in lower
+    ):
+        return "m"
+
+    if "boom" in lower:
+        return "m"
+
+    if "voltage" in lower:
+        return "V"
+
+    if "gps_lat" in lower or "gps_lon" in lower:
+        return "°"
+
+    if "gps_alt" in lower:
+        return "m"
+
+    return ""
+
+
+def get_label_and_unit(variable):
+
+    key = str(variable)
+
+    if key in VARIABLE_INFO:
+
+        label, unit = VARIABLE_INFO[key]
+
+        return label, unit
+
+    return (
+        prettify_variable_name(key),
+        infer_unit(key),
     )
 
-    response.raise_for_status()
 
-    if len(response.content) < 1000:
-        raise RuntimeError(
-            "THREDDS returned an unexpectedly small file."
+def should_exclude_variable(name):
+
+    lower = str(name).lower()
+
+    if lower == "_time":
+        return True
+
+    # Time/calendar helper fields
+    if lower in [
+        "year",
+        "month",
+        "day",
+        "hour",
+        "minute",
+        "second",
+        "doy",
+        "dayofyear",
+    ]:
+        return True
+
+    # QC / flag variables are not physical observations
+    if (
+        "flag" in lower
+        or lower.endswith("_qc")
+        or lower.startswith("qc_")
+    ):
+        return True
+
+    return False
+
+
+def latest_measurements(df):
+
+    output = {}
+
+    for column in df.columns:
+
+        if should_exclude_variable(column):
+            continue
+
+        values = numeric_series(
+            df,
+            column,
         )
 
-    print(
-        f"[{station}] L2 THREDDS download successful: "
-        f"{len(response.content) / 1024 / 1024:.2f} MB"
-    )
+        valid = values.notna()
 
-    return response.content, {
-        "source": "GEUS THREDDS L2",
-        "source_url": url
-    }
+        if not valid.any():
+            continue
+
+        valid_indices = df.index[valid]
+
+        last_index = valid_indices[-1]
+
+        value = clean_number(
+            values.loc[last_index]
+        )
+
+        if value is None:
+            continue
+
+        measurement_time = iso_time(
+            df.loc[
+                last_index,
+                "_time",
+            ]
+        )
+
+        label, unit = get_label_and_unit(
+            column
+        )
+
+        output[str(column)] = {
+            "value": value,
+            "time": measurement_time,
+            "label": label,
+            "unit": unit,
+        }
+
+    return output
 
 
-def get_dataverse_files():
-
-    print("")
-    print("Loading Dataverse metadata for fallback...")
-
-    response = session.get(
-        DATASET_API,
-        timeout=(20, 120)
-    )
-
-    response.raise_for_status()
-
-    metadata = response.json()
-
-    files = metadata["data"]["latestVersion"]["files"]
+def stats_for_series(
+    series,
+    times,
+    latest_time,
+):
 
     result = {}
 
-    for item in files:
+    for label, days in [
+        ("week", 7),
+        ("month", 30),
+    ]:
 
-        data_file = item.get("dataFile", {})
+        start_time = (
+            latest_time
+            -
+            pd.Timedelta(days=days)
+        )
 
-        filename = data_file.get("filename")
+        mask = (
+            times >= start_time
+        )
 
-        if filename:
-            result[filename] = data_file
+        subset = series[mask]
+
+        subset = subset.dropna()
+
+        if subset.empty:
+
+            result[label] = {
+                "min": None,
+                "max": None,
+            }
+
+        else:
+
+            result[label] = {
+                "min": clean_number(
+                    subset.min()
+                ),
+                "max": clean_number(
+                    subset.max()
+                ),
+            }
 
     return result
 
 
-def download_from_dataverse(station, dataverse_files):
+# ============================================================
+# PROCESS ONE STATION
+# ============================================================
 
-    filename = f"{station}_hour.csv"
-
-    data_file = dataverse_files.get(filename)
-
-    if data_file is None:
-        raise RuntimeError(
-            f"Could not find {filename} in Dataverse."
-        )
-
-    file_id = data_file["id"]
-
-    url = (
-        f"https://dataverse.geus.dk/api/access/datafile/{file_id}"
-    )
-
-    print("")
-    print(f"[{station}] Trying Dataverse fallback...")
-
-    response = session.get(
-        url,
-        timeout=(20, 300),
-        allow_redirects=True
-    )
-
-    response.raise_for_status()
-
-    print(
-        f"[{station}] Dataverse download successful: "
-        f"{len(response.content) / 1024 / 1024:.2f} MB"
-    )
-
-    return response.content, {
-        "source": "GEUS Dataverse fallback",
-        "source_url": url
-    }
-
-
-def download_station(station, dataverse_files):
-
-    try:
-
-        return download_from_l2_thredds(station)
-
-    except Exception as error:
-
-        print("")
-        print(f"[{station}] L2 THREDDS failed.")
-        print(f"[{station}] Reason: {error}")
-        print(f"[{station}] Switching to Dataverse fallback.")
-
-        return download_from_dataverse(
-            station,
-            dataverse_files
-        )
-
-
-def parse_station_csv(
-    station,
-    csv_bytes,
-    source_info
+def process_station(
+    station_id,
+    metadata,
 ):
 
-    csv_path = Path(__file__).with_name(
-        f"{station}_hour.csv"
+    df, source_url = download_csv(
+        station_id
     )
 
-    csv_path.write_bytes(csv_bytes)
-
-    print(f"[{station}] Reading CSV...")
-
-    df = pd.read_csv(csv_path)
-
-    print(
-        f"[{station}] Rows: {len(df)}"
-    )
-
-    time_col = first_existing(
-        df.columns,
-        [
-            "time",
-            "timestamp",
-            "datetime",
-            "date"
-        ]
-    )
-
-    if time_col is None:
-
-        raise RuntimeError(
-            f"[{station}] No time column found. "
-            f"Columns: {list(df.columns)}"
-        )
-
-
-    df[time_col] = pd.to_datetime(
-        df[time_col],
-        utc=True,
-        errors="coerce"
-    )
-
-
-    df = (
-        df
-        .dropna(subset=[time_col])
-        .sort_values(time_col)
-    )
-
+    df = prepare_dataframe(df)
 
     if df.empty:
-
-        raise RuntimeError(
-            f"[{station}] No valid observations."
+        raise ValueError(
+            f"No usable rows for {station_id}"
         )
 
 
-    mapping = {
+    # --------------------------------------------------------
+    # Standardised variables used by charts
+    # --------------------------------------------------------
 
-        "temperature":
-            first_existing(
-                df.columns,
-                ["t_u", "t_i", "air_temperature"]
-            ),
+    temperature = first_available_series(
+        df,
+        TEMPERATURE_CANDIDATES,
+    )
 
-        "wind_speed":
-            first_existing(
-                df.columns,
-                ["wspd_u", "wspd_i", "wind_speed"]
-            ),
+    wind_speed = first_available_series(
+        df,
+        WIND_SPEED_CANDIDATES,
+    )
 
-        "wind_direction":
-            first_existing(
-                df.columns,
-                ["wdir_u", "wdir_i", "wind_direction"]
-            ),
+    wind_direction = first_available_series(
+        df,
+        WIND_DIRECTION_CANDIDATES,
+    )
 
-        "pressure":
-            first_existing(
-                df.columns,
-                ["p_u", "p_i", "air_pressure"]
-            ),
+    pressure = first_available_series(
+        df,
+        PRESSURE_CANDIDATES,
+    )
 
-        "humidity":
-            first_existing(
-                df.columns,
-                ["rh_u", "rh_i", "relative_humidity"]
-            )
-    }
-
-
-    print(f"[{station}] Variable mapping:")
-
-    for key, value in mapping.items():
-        print(
-            f"    {key}: {value}"
-        )
-
-
-    latest = df.iloc[-1]
-
-    latest_time = latest[time_col]
-
-
-    print(
-        f"[{station}] Latest timestamp: "
-        f"{latest_time.isoformat()}"
+    humidity = first_available_series(
+        df,
+        HUMIDITY_CANDIDATES,
     )
 
 
-    week_start = (
-        latest_time
-        - pd.Timedelta(days=7)
-    )
+    # Some datasets may store pressure in Pa rather than hPa
+    pressure_median = pressure.dropna().median()
+
+    if (
+        pd.notna(pressure_median)
+        and pressure_median > 2000
+    ):
+        pressure = pressure / 100.0
+
+
+    times = df["_time"]
+
+    latest_time = times.max()
+
+
+    # --------------------------------------------------------
+    # 30 day history
+    # --------------------------------------------------------
 
     month_start = (
         latest_time
-        - pd.Timedelta(days=30)
+        -
+        pd.Timedelta(days=30)
     )
 
-
-    week_df = df[
-        df[time_col] >= week_start
-    ]
-
-    month_df = df[
-        df[time_col] >= month_start
-    ]
-
-
-    def extrema(frame, column):
-
-        if column is None:
-            return {
-                "min": None,
-                "max": None
-            }
-
-        values = pd.to_numeric(
-            frame[column],
-            errors="coerce"
-        ).dropna()
-
-        if values.empty:
-            return {
-                "min": None,
-                "max": None
-            }
-
-        return {
-            "min": clean_value(
-                values.min()
-            ),
-            "max": clean_value(
-                values.max()
-            )
-        }
-
-
-    stats = {}
-
-    for metric in [
-        "temperature",
-        "wind_speed",
-        "pressure"
-    ]:
-
-        column = mapping[metric]
-
-        stats[metric] = {
-
-            "week":
-                extrema(
-                    week_df,
-                    column
-                ),
-
-            "month":
-                extrema(
-                    month_df,
-                    column
-                )
-        }
-
-
-    latest_values = {
-        "time": latest_time.isoformat()
-    }
-
-
-    for metric, column in mapping.items():
-
-        if column is None:
-
-            latest_values[metric] = None
-
-        else:
-
-            latest_values[metric] = clean_value(
-                latest[column]
-            )
-
+    month_mask = (
+        times >= month_start
+    )
 
     history = []
 
+    history_indices = df.index[
+        month_mask
+    ]
 
-    for _, row in month_df.iterrows():
+    for idx in history_indices:
 
-        item = {
-            "time":
-                row[time_col].isoformat()
-        }
+        history.append({
+            "time": iso_time(
+                df.loc[idx, "_time"]
+            ),
 
-        for metric in [
-            "temperature",
-            "wind_speed",
-            "pressure",
-            "humidity"
-        ]:
+            "temperature":
+                clean_number(
+                    temperature.loc[idx]
+                ),
 
-            column = mapping[metric]
+            "wind_speed":
+                clean_number(
+                    wind_speed.loc[idx]
+                ),
 
-            if column is None:
+            "wind_direction":
+                clean_number(
+                    wind_direction.loc[idx]
+                ),
 
-                item[metric] = None
+            "pressure":
+                clean_number(
+                    pressure.loc[idx]
+                ),
 
-            else:
-
-                item[metric] = clean_value(
-                    row[column]
-                )
-
-        history.append(item)
-
-
-    meta = STATIONS[station]
+            "humidity":
+                clean_number(
+                    humidity.loc[idx]
+                ),
+        })
 
 
-    return {
+    # --------------------------------------------------------
+    # Latest values for core variables
+    # --------------------------------------------------------
 
-        "id":
-            station,
+    def last_valid(series):
 
-        "name":
-            meta["name"],
+        valid = series.notna()
 
-        "description":
-            meta["description"],
+        if not valid.any():
+            return None, None
 
-        "latitude":
-            meta["latitude"],
+        valid_indices = series.index[
+            valid
+        ]
 
-        "longitude":
-            meta["longitude"],
+        idx = valid_indices[-1]
 
-        "elevation_m":
-            meta["elevation_m"],
+        return (
+            clean_number(
+                series.loc[idx]
+            ),
+            iso_time(
+                df.loc[idx, "_time"]
+            ),
+        )
 
-        "source":
-            source_info["source"],
 
-        "source_url":
-            source_info["source_url"],
+    temp_value, temp_time = last_valid(
+        temperature
+    )
 
-        "latest":
-            latest_values,
+    wind_value, wind_time = last_valid(
+        wind_speed
+    )
 
-        "stats":
-            stats,
+    wdir_value, wdir_time = last_valid(
+        wind_direction
+    )
 
-        "history":
-            history
+    pressure_value, pressure_time = last_valid(
+        pressure
+    )
+
+    humidity_value, humidity_time = last_valid(
+        humidity
+    )
+
+
+    core_times = [
+        x
+        for x in [
+            temp_time,
+            wind_time,
+            pressure_time,
+            humidity_time,
+            wdir_time,
+        ]
+        if x is not None
+    ]
+
+
+    if core_times:
+
+        latest_core_time = max(
+            core_times,
+            key=lambda x: pd.Timestamp(x)
+        )
+
+    else:
+
+        latest_core_time = iso_time(
+            latest_time
+        )
+
+
+    latest = {
+        "time": latest_core_time,
+        "temperature": temp_value,
+        "wind_speed": wind_value,
+        "wind_direction": wdir_value,
+        "pressure": pressure_value,
+        "humidity": humidity_value,
     }
 
 
+    # --------------------------------------------------------
+    # Every numerical measurement in the source file
+    # --------------------------------------------------------
+
+    all_latest_measurements = latest_measurements(
+        df
+    )
+
+
+    # --------------------------------------------------------
+    # Stats
+    # --------------------------------------------------------
+
+    stats = {
+
+        "temperature":
+            stats_for_series(
+                temperature,
+                times,
+                latest_time,
+            ),
+
+        "wind_speed":
+            stats_for_series(
+                wind_speed,
+                times,
+                latest_time,
+            ),
+
+        "pressure":
+            stats_for_series(
+                pressure,
+                times,
+                latest_time,
+            ),
+    }
+
+
+    # --------------------------------------------------------
+    # Output
+    # --------------------------------------------------------
+
+    station_output = {
+        "id": station_id,
+        "name": metadata["name"],
+        "description": metadata["description"],
+        "latitude": metadata["latitude"],
+        "longitude": metadata["longitude"],
+        "elevation_m": metadata["elevation_m"],
+
+        "source": "GEUS THREDDS L2",
+        "source_url": source_url,
+
+        "latest": latest,
+
+        "latest_measurements":
+            all_latest_measurements,
+
+        "stats": stats,
+
+        "history": history,
+    }
+
+
+    print(
+        station_id,
+        "-",
+        len(all_latest_measurements),
+        "numerical measurement variables"
+    )
+
+    return station_output
+
+
+# ============================================================
+# MAIN
+# ============================================================
+
 def main():
 
-    print("")
-    print(
-        "SERMILIK / MITTIVAKKAT WEATHER UPDATE"
-    )
-    print(
-        "L2 THREDDS first, Dataverse fallback"
-    )
-    print("")
-
-
-    dataverse_files = get_dataverse_files()
-
-
     output = {
-
         "generated_at":
             datetime.now(
                 timezone.utc
@@ -487,118 +815,56 @@ def main():
 
         "stations": {},
 
-        "failures": []
+        "failures": [],
     }
 
 
-    for station in STATIONS:
+    for station_id, metadata in STATIONS.items():
 
         try:
 
-            csv_bytes, source_info = (
-                download_station(
-                    station,
-                    dataverse_files
-                )
-            )
-
-
-            station_data = (
-                parse_station_csv(
-                    station,
-                    csv_bytes,
-                    source_info
-                )
-            )
-
-
             output["stations"][
-                station
-            ] = station_data
-
-
-            print("")
-            print(
-                f"[{station}] SUCCESS"
+                station_id
+            ] = process_station(
+                station_id,
+                metadata,
             )
-
-            print(
-                f"[{station}] Source: "
-                f"{station_data['source']}"
-            )
-
-            print(
-                f"[{station}] Latest: "
-                f"{station_data['latest']['time']}"
-            )
-
 
         except Exception as error:
 
-            print("")
             print(
-                f"[{station}] FAILED: {error}"
+                f"FAILED {station_id}: {error}"
             )
 
             output[
                 "failures"
             ].append({
-
                 "station":
-                    station,
+                    station_id,
 
                 "error":
-                    str(error)
-
+                    str(error),
             })
 
 
-    if not output["stations"]:
+    with open(
+        "weather.json",
+        "w",
+        encoding="utf-8",
+    ) as file:
 
-        raise RuntimeError(
-            "No station data could be downloaded."
-        )
-
-
-    OUTFILE.write_text(
-        json.dumps(
+        json.dump(
             output,
-            indent=2
-        ),
-        encoding="utf-8"
-    )
-
-
-    print("")
-    print("==============================")
-    print("WEATHER UPDATE COMPLETE")
-    print("==============================")
-
-
-    for station, data in (
-        output["stations"].items()
-    ):
-
-        print(
-            f"{station}: "
-            f"{data['latest']['time']} "
-            f"via {data['source']}"
+            file,
+            ensure_ascii=False,
+            indent=2,
+            allow_nan=False,
         )
 
 
-    if output["failures"]:
-
-        print("")
-        print("Failures:")
-
-        for failure in (
-            output["failures"]
-        ):
-
-            print(
-                failure["station"],
-                failure["error"]
-            )
+    print(
+        "weather.json written successfully"
+    )
 
 
 if __name__ == "__main__":
