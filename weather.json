@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-27T02:14:53.861996+00:00",
+  "generated_at": "2026-11-27T11:00:00.039965+00:00",
   "stations": {
     "SER_B": {
       "id": "SER_B",
@@ -11,47 +11,47 @@
       "source": "GEUS THREDDS L2",
       "source_url": "https://thredds.geus.dk/thredds/fileServer/aws/l2stations/csv/hour/SER_B_hour.csv",
       "latest": {
-        "time": "2026-11-26T23:00:00+00:00"
+        "time": "2026-11-27T07:00:00+00:00"
       },
       "latest_measurements": {
         "temperature": {
           "label": "Air temperature",
           "unit": "°C",
           "digits": 1,
-          "value": 1.6,
-          "time": "2026-11-26T23:00:00+00:00",
+          "value": 0.833,
+          "time": "2026-11-27T07:00:00+00:00",
           "source_column": "t_u"
         },
         "wind_speed": {
           "label": "Wind speed",
           "unit": "m/s",
           "digits": 1,
-          "value": 6.525,
-          "time": "2026-11-26T23:00:00+00:00",
+          "value": 0.778,
+          "time": "2026-11-27T06:00:00+00:00",
           "source_column": "wspd_u"
         },
         "wind_direction": {
           "label": "Wind direction",
           "unit": "°",
           "digits": 0,
-          "value": 110.3004,
-          "time": "2026-11-26T23:00:00+00:00",
+          "value": 69.4034,
+          "time": "2026-11-27T06:00:00+00:00",
           "source_column": "wdir_u"
         },
         "humidity": {
           "label": "Relative humidity",
           "unit": "%",
           "digits": 0,
-          "value": 86.6,
-          "time": "2026-11-26T23:00:00+00:00",
+          "value": 84.6,
+          "time": "2026-11-27T07:00:00+00:00",
           "source_column": "rh_u"
         },
         "pressure": {
           "label": "Air pressure",
           "unit": "hPa",
           "digits": 0,
-          "value": 972.0,
-          "time": "2026-11-26T23:00:00+00:00",
+          "value": 971.0,
+          "time": "2026-11-27T07:00:00+00:00",
           "source_column": "p_u"
         },
         "precipitation": {
@@ -59,7 +59,7 @@
           "unit": "mm",
           "digits": 1,
           "value": 0.0,
-          "time": "2026-11-26T23:00:00+00:00",
+          "time": "2026-11-27T07:00:00+00:00",
           "source_column": "precip_u"
         },
         "boom_height": {
@@ -75,7 +75,7 @@
           "unit": "W/m²",
           "digits": 0,
           "value": 0.0,
-          "time": "2026-11-26T23:00:00+00:00",
+          "time": "2026-11-27T07:00:00+00:00",
           "source_column": "dsr"
         },
         "upward_radiation": {
@@ -83,7 +83,7 @@
           "unit": "W/m²",
           "digits": 0,
           "value": 0.0,
-          "time": "2026-11-26T23:00:00+00:00",
+          "time": "2026-11-27T07:00:00+00:00",
           "source_column": "usr"
         },
         "albedo": {
@@ -96,110 +96,6 @@
         }
       },
       "history": [
-        {
-          "time": "2026-10-28T00:00:00+00:00",
-          "temperature": 3.3,
-          "wind_speed": 3.821,
-          "wind_direction": 71.1601,
-          "humidity": 75.95,
-          "pressure": 989.0,
-          "precipitation": 0.0,
-          "boom_height": null,
-          "downward_radiation": 0.0,
-          "upward_radiation": 0.0,
-          "albedo": null
-        },
-        {
-          "time": "2026-10-28T01:00:00+00:00",
-          "temperature": 1.767,
-          "wind_speed": 3.481,
-          "wind_direction": 67.4898,
-          "humidity": 86.3,
-          "pressure": 989.0,
-          "precipitation": 0.0,
-          "boom_height": null,
-          "downward_radiation": 0.0,
-          "upward_radiation": 0.0,
-          "albedo": null
-        },
-        {
-          "time": "2026-10-28T02:00:00+00:00",
-          "temperature": 2.3,
-          "wind_speed": 3.733,
-          "wind_direction": 73.0402,
-          "humidity": 82.5,
-          "pressure": 989.0,
-          "precipitation": 0.0,
-          "boom_height": null,
-          "downward_radiation": 0.0,
-          "upward_radiation": 0.0,
-          "albedo": null
-        },
-        {
-          "time": "2026-10-28T03:00:00+00:00",
-          "temperature": 2.7,
-          "wind_speed": 5.974,
-          "wind_direction": 79.9696,
-          "humidity": 81.3,
-          "pressure": 989.0,
-          "precipitation": 0.0,
-          "boom_height": null,
-          "downward_radiation": 0.0,
-          "upward_radiation": 0.0,
-          "albedo": null
-        },
-        {
-          "time": "2026-10-28T04:00:00+00:00",
-          "temperature": 2.783,
-          "wind_speed": 8.06,
-          "wind_direction": 80.3002,
-          "humidity": 81.0,
-          "pressure": 990.0,
-          "precipitation": 0.0,
-          "boom_height": null,
-          "downward_radiation": 0.0,
-          "upward_radiation": 0.0,
-          "albedo": null
-        },
-        {
-          "time": "2026-10-28T05:00:00+00:00",
-          "temperature": 3.2,
-          "wind_speed": 7.961,
-          "wind_direction": 81.7998,
-          "humidity": 78.5,
-          "pressure": 989.0,
-          "precipitation": 0.0,
-          "boom_height": null,
-          "downward_radiation": 0.0,
-          "upward_radiation": 0.0,
-          "albedo": null
-        },
-        {
-          "time": "2026-10-28T06:00:00+00:00",
-          "temperature": 3.217,
-          "wind_speed": 6.665,
-          "wind_direction": 62.4103,
-          "humidity": 77.4,
-          "pressure": 990.0,
-          "precipitation": 0.0,
-          "boom_height": null,
-          "downward_radiation": 0.0,
-          "upward_radiation": 0.0,
-          "albedo": null
-        },
-        {
-          "time": "2026-10-28T07:00:00+00:00",
-          "temperature": 2.933,
-          "wind_speed": 4.872,
-          "wind_direction": 83.1995,
-          "humidity": 80.2,
-          "pressure": 991.0,
-          "precipitation": 0.0,
-          "boom_height": null,
-          "downward_radiation": 0.0,
-          "upward_radiation": 0.0,
-          "albedo": null
-        },
         {
           "time": "2026-10-28T08:00:00+00:00",
           "temperature": 1.75,
@@ -9458,6 +9354,110 @@
         },
         {
           "time": "2026-11-27T00:00:00+00:00",
+          "temperature": 2.717,
+          "wind_speed": 5.844,
+          "wind_direction": 128.7999,
+          "humidity": 78.88,
+          "pressure": 971.0,
+          "precipitation": 0.0,
+          "boom_height": null,
+          "downward_radiation": 0.0,
+          "upward_radiation": 0.0,
+          "albedo": null
+        },
+        {
+          "time": "2026-11-27T01:00:00+00:00",
+          "temperature": 0.717,
+          "wind_speed": 2.27,
+          "wind_direction": 239.4007,
+          "humidity": 88.5,
+          "pressure": 971.0,
+          "precipitation": 0.0,
+          "boom_height": null,
+          "downward_radiation": 0.0,
+          "upward_radiation": 0.0,
+          "albedo": null
+        },
+        {
+          "time": "2026-11-27T02:00:00+00:00",
+          "temperature": 0.167,
+          "wind_speed": 1.016,
+          "wind_direction": 300.6997,
+          "humidity": 91.7,
+          "pressure": 971.0,
+          "precipitation": 0.0,
+          "boom_height": null,
+          "downward_radiation": 0.0,
+          "upward_radiation": 0.0,
+          "albedo": null
+        },
+        {
+          "time": "2026-11-27T03:00:00+00:00",
+          "temperature": 0.683,
+          "wind_speed": 0.528,
+          "wind_direction": 178.003,
+          "humidity": 86.4,
+          "pressure": 970.0,
+          "precipitation": 0.0,
+          "boom_height": null,
+          "downward_radiation": 0.0,
+          "upward_radiation": 0.0,
+          "albedo": null
+        },
+        {
+          "time": "2026-11-27T04:00:00+00:00",
+          "temperature": 0.283,
+          "wind_speed": null,
+          "wind_direction": null,
+          "humidity": 86.1,
+          "pressure": 971.0,
+          "precipitation": 0.0,
+          "boom_height": null,
+          "downward_radiation": 0.0,
+          "upward_radiation": 0.0,
+          "albedo": null
+        },
+        {
+          "time": "2026-11-27T05:00:00+00:00",
+          "temperature": 0.217,
+          "wind_speed": 1.704,
+          "wind_direction": 178.7995,
+          "humidity": 84.3,
+          "pressure": 971.0,
+          "precipitation": 0.0,
+          "boom_height": null,
+          "downward_radiation": 0.0,
+          "upward_radiation": 0.0,
+          "albedo": null
+        },
+        {
+          "time": "2026-11-27T06:00:00+00:00",
+          "temperature": -0.033,
+          "wind_speed": 0.778,
+          "wind_direction": 69.4034,
+          "humidity": 87.9,
+          "pressure": 971.0,
+          "precipitation": 0.0,
+          "boom_height": null,
+          "downward_radiation": 0.0,
+          "upward_radiation": 0.0,
+          "albedo": null
+        },
+        {
+          "time": "2026-11-27T07:00:00+00:00",
+          "temperature": 0.833,
+          "wind_speed": null,
+          "wind_direction": null,
+          "humidity": 84.6,
+          "pressure": 971.0,
+          "precipitation": 0.0,
+          "boom_height": null,
+          "downward_radiation": 0.0,
+          "upward_radiation": 0.0,
+          "albedo": null
+        },
+        {
+          "time": "2026-11-27T08:00:00+00:00",
           "temperature": null,
           "wind_speed": null,
           "wind_direction": null,
@@ -9481,39 +9481,39 @@
       "source": "GEUS THREDDS L2",
       "source_url": "https://thredds.geus.dk/thredds/fileServer/aws/l2stations/csv/hour/MIT_B_hour.csv",
       "latest": {
-        "time": "2026-11-27T00:00:00+00:00"
+        "time": "2026-11-27T07:00:00+00:00"
       },
       "latest_measurements": {
         "temperature": {
           "label": "Air temperature",
           "unit": "°C",
           "digits": 1,
-          "value": -0.75,
-          "time": "2026-11-26T23:00:00+00:00",
+          "value": 0.517,
+          "time": "2026-11-27T06:00:00+00:00",
           "source_column": "t_u"
         },
         "wind_speed": {
           "label": "Wind speed",
           "unit": "m/s",
           "digits": 1,
-          "value": 1.798,
-          "time": "2026-11-26T23:00:00+00:00",
+          "value": 3.013,
+          "time": "2026-11-27T04:00:00+00:00",
           "source_column": "wspd_u"
         },
         "wind_direction": {
           "label": "Wind direction",
           "unit": "°",
           "digits": 0,
-          "value": 5.019,
-          "time": "2026-11-26T23:00:00+00:00",
+          "value": 86.7008,
+          "time": "2026-11-27T04:00:00+00:00",
           "source_column": "wdir_u"
         },
         "humidity": {
           "label": "Relative humidity",
           "unit": "%",
           "digits": 0,
-          "value": 100.0,
-          "time": "2026-11-26T23:00:00+00:00",
+          "value": 93.8,
+          "time": "2026-11-27T06:00:00+00:00",
           "source_column": "rh_u"
         },
         "pressure": {
@@ -9521,7 +9521,7 @@
           "unit": "hPa",
           "digits": 0,
           "value": 913.0,
-          "time": "2026-11-26T23:00:00+00:00",
+          "time": "2026-11-27T06:00:00+00:00",
           "source_column": "p_u"
         },
         "precipitation": {
@@ -9529,7 +9529,7 @@
           "unit": "mm",
           "digits": 1,
           "value": 487.2,
-          "time": "2026-11-27T00:00:00+00:00",
+          "time": "2026-11-27T07:00:00+00:00",
           "source_column": "precip_u"
         },
         "boom_height": {
@@ -9545,7 +9545,7 @@
           "unit": "W/m²",
           "digits": 0,
           "value": 0.0,
-          "time": "2026-11-26T23:00:00+00:00",
+          "time": "2026-11-27T06:00:00+00:00",
           "source_column": "dsr"
         },
         "upward_radiation": {
@@ -9553,7 +9553,7 @@
           "unit": "W/m²",
           "digits": 0,
           "value": 0.0,
-          "time": "2026-11-26T23:00:00+00:00",
+          "time": "2026-11-27T06:00:00+00:00",
           "source_column": "usr"
         },
         "albedo": {
@@ -9566,97 +9566,6 @@
         }
       },
       "history": [
-        {
-          "time": "2026-10-28T00:00:00+00:00",
-          "temperature": -0.75,
-          "wind_speed": 9.13,
-          "wind_direction": 101.5998,
-          "humidity": 91.7,
-          "pressure": 929.0,
-          "precipitation": 485.4,
-          "boom_height": null,
-          "downward_radiation": 0.0,
-          "upward_radiation": 0.0,
-          "albedo": null
-        },
-        {
-          "time": "2026-10-28T01:00:00+00:00",
-          "temperature": -0.65,
-          "wind_speed": 7.655,
-          "wind_direction": 102.2001,
-          "humidity": 89.9,
-          "pressure": 930.0,
-          "precipitation": 485.4,
-          "boom_height": null,
-          "downward_radiation": 0.0,
-          "upward_radiation": 0.0,
-          "albedo": null
-        },
-        {
-          "time": "2026-10-28T02:00:00+00:00",
-          "temperature": null,
-          "wind_speed": null,
-          "wind_direction": null,
-          "humidity": null,
-          "pressure": null,
-          "precipitation": 485.4,
-          "boom_height": null,
-          "downward_radiation": null,
-          "upward_radiation": null,
-          "albedo": null
-        },
-        {
-          "time": "2026-10-28T03:00:00+00:00",
-          "temperature": -1.0,
-          "wind_speed": 13.35,
-          "wind_direction": 111.2001,
-          "humidity": 94.6,
-          "pressure": 929.0,
-          "precipitation": null,
-          "boom_height": null,
-          "downward_radiation": 0.0,
-          "upward_radiation": 0.0,
-          "albedo": null
-        },
-        {
-          "time": "2026-10-28T04:00:00+00:00",
-          "temperature": -0.967,
-          "wind_speed": 18.57,
-          "wind_direction": 108.4998,
-          "humidity": 95.8,
-          "pressure": 930.0,
-          "precipitation": 485.4,
-          "boom_height": null,
-          "downward_radiation": 0.0,
-          "upward_radiation": 0.0,
-          "albedo": null
-        },
-        {
-          "time": "2026-10-28T05:00:00+00:00",
-          "temperature": -0.95,
-          "wind_speed": 16.07,
-          "wind_direction": 105.5999,
-          "humidity": 97.2,
-          "pressure": 930.0,
-          "precipitation": 485.6,
-          "boom_height": null,
-          "downward_radiation": 0.0,
-          "upward_radiation": 0.0,
-          "albedo": null
-        },
-        {
-          "time": "2026-10-28T06:00:00+00:00",
-          "temperature": -0.867,
-          "wind_speed": 17.68,
-          "wind_direction": 110.2999,
-          "humidity": 97.6,
-          "pressure": 930.0,
-          "precipitation": 485.6,
-          "boom_height": null,
-          "downward_radiation": 0.0,
-          "upward_radiation": 0.0,
-          "albedo": null
-        },
         {
           "time": "2026-10-28T07:00:00+00:00",
           "temperature": -0.967,
@@ -18928,6 +18837,97 @@
         },
         {
           "time": "2026-11-27T00:00:00+00:00",
+          "temperature": -0.5,
+          "wind_speed": 2.741,
+          "wind_direction": 58.3691,
+          "humidity": 100.0,
+          "pressure": 912.0,
+          "precipitation": 487.2,
+          "boom_height": null,
+          "downward_radiation": 0.0,
+          "upward_radiation": 0.0,
+          "albedo": null
+        },
+        {
+          "time": "2026-11-27T01:00:00+00:00",
+          "temperature": 0.25,
+          "wind_speed": 1.402,
+          "wind_direction": 59.7203,
+          "humidity": 100.0,
+          "pressure": 913.0,
+          "precipitation": 487.2,
+          "boom_height": null,
+          "downward_radiation": 0.0,
+          "upward_radiation": 0.0,
+          "albedo": null
+        },
+        {
+          "time": "2026-11-27T02:00:00+00:00",
+          "temperature": 0.683,
+          "wind_speed": 0.947,
+          "wind_direction": 73.7621,
+          "humidity": 98.5,
+          "pressure": 913.0,
+          "precipitation": 487.2,
+          "boom_height": null,
+          "downward_radiation": 0.0,
+          "upward_radiation": 0.0,
+          "albedo": null
+        },
+        {
+          "time": "2026-11-27T03:00:00+00:00",
+          "temperature": 1.283,
+          "wind_speed": 0.775,
+          "wind_direction": 51.5434,
+          "humidity": 91.0,
+          "pressure": 912.0,
+          "precipitation": 487.2,
+          "boom_height": null,
+          "downward_radiation": 0.0,
+          "upward_radiation": 0.0,
+          "albedo": null
+        },
+        {
+          "time": "2026-11-27T04:00:00+00:00",
+          "temperature": 1.317,
+          "wind_speed": 3.013,
+          "wind_direction": 86.7008,
+          "humidity": 91.2,
+          "pressure": 912.0,
+          "precipitation": 487.2,
+          "boom_height": null,
+          "downward_radiation": 0.0,
+          "upward_radiation": 0.0,
+          "albedo": null
+        },
+        {
+          "time": "2026-11-27T05:00:00+00:00",
+          "temperature": 1.1,
+          "wind_speed": null,
+          "wind_direction": null,
+          "humidity": 92.1,
+          "pressure": 912.0,
+          "precipitation": 487.2,
+          "boom_height": null,
+          "downward_radiation": 0.0,
+          "upward_radiation": 0.0,
+          "albedo": null
+        },
+        {
+          "time": "2026-11-27T06:00:00+00:00",
+          "temperature": 0.517,
+          "wind_speed": null,
+          "wind_direction": null,
+          "humidity": 93.8,
+          "pressure": 913.0,
+          "precipitation": 487.2,
+          "boom_height": null,
+          "downward_radiation": 0.0,
+          "upward_radiation": 0.0,
+          "albedo": null
+        },
+        {
+          "time": "2026-11-27T07:00:00+00:00",
           "temperature": null,
           "wind_speed": null,
           "wind_direction": null,
